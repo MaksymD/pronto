@@ -376,6 +376,18 @@ pronto/
 
 ---
 
+## Professional Services
+
+Need help getting started? I offer:
+
+- **Installation & setup** — I'll deploy Pronto on your server, configure all integrations, and get you running ($100–200)
+- **Customization** — custom features, branding, or integrations for your specific business ($150–400)
+- **Managed hosting** — don't want to manage a server? Use the hosted version at [trypronto.app](https://trypronto.app) from $19/mo
+
+Contact: [ukv2179@gmail.com](mailto:ukv2179@gmail.com) or open an issue with the `services` label.
+
+---
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
