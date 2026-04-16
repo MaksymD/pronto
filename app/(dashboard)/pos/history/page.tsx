@@ -118,7 +118,6 @@ export default async function TransactionHistoryPage({
               </thead>
               <tbody>
                 {transactions.map((tx) => {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const items = (Array.isArray(tx.items) ? tx.items : []) as any[]
                   const firstName: string = items[0]?.name ?? ''
                   const extraCount = items.length - 1

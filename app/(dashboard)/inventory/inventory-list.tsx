@@ -58,7 +58,7 @@ export function InventoryList({ items, currency }: Props) {
             {query ? (
               <>
                 <div className="text-4xl mb-3">🔍</div>
-                <div className="font-medium">No items match "{query}"</div>
+                <div className="font-medium">No items match {'"'}{query}{'"'}</div>
               </>
             ) : (
               <>

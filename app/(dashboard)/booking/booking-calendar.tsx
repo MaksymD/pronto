@@ -561,7 +561,7 @@ export function BookingCalendar({ businessId, slug, appointments: initial, emplo
                 </span>
               )}
             </div>
-            {selectedAppt.notes && <p className="text-sm text-gray-600 mb-4 italic">"{selectedAppt.notes}"</p>}
+            {selectedAppt.notes && <p className="text-sm text-gray-600 mb-4 italic">{'"'}{selectedAppt.notes}{'"'}</p>}
             <div className="mb-4">
               <div className="text-xs text-gray-400 mb-2 uppercase font-medium">{t('detail.statusLabel')}</div>
               <div className="flex flex-wrap gap-2">

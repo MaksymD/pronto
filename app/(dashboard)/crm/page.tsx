@@ -52,7 +52,6 @@ export default async function CRMPage({
       for (const tx of lastTxs) {
         if (tx.client_id && !lastServiceMap[tx.client_id]) {
           const items = Array.isArray(tx.items) ? tx.items : []
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const name = (items[0] as any)?.name
           if (name) lastServiceMap[tx.client_id] = name
         }
