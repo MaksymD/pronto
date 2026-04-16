@@ -1,3 +1,5 @@
+🌍 **English** | [Español](docs/README.es.md) | [Português](docs/README.pt.md)
+
 # Pronto — Business Management for Service SMBs
 
 > Self-hosted, open-source POS · CRM · Inventory · Booking · Omnichannel Notifications.  
