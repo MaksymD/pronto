@@ -48,6 +48,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl)
   }
 
+  // Public routes — no redirect for anyone
+  const publicPaths = ['/', '/pricing', '/terms', '/privacy', '/refund']
+  if (publicPaths.includes(pathname)) {
+    return supabaseResponse
+  }
+
   // Авторизованного пользователя с главной → дашборд
   if (user && pathname === '/') {
     const dashboardUrl = request.nextUrl.clone()
