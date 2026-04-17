@@ -6,7 +6,7 @@
  * В self-hosted режиме (NEXT_PUBLIC_DEPLOYMENT_MODE != 'saas') все лимиты отключены.
  */
 
-import { PLAN_LIMITS } from './lemonsqueezy'
+import { PLAN_LIMITS, type NotificationChannel } from './lemonsqueezy'
 
 export interface PlanCheck {
   allowed: boolean
@@ -41,6 +41,18 @@ export async function checkEmployeeLimit(
     current,
     plan,
   }
+}
+
+/**
+ * Проверить, доступен ли канал уведомлений для данного плана
+ */
+export function checkNotificationChannel(
+  plan: string,
+  channel: NotificationChannel
+): boolean {
+  if (isSelfHosted) return true
+  const limits = PLAN_LIMITS[plan] ?? PLAN_LIMITS.free
+  return limits.notifications.includes(channel)
 }
 
 /**

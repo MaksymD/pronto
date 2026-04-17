@@ -21,11 +21,48 @@ export const PLAN_VARIANT_IDS: Record<string, string> = {
 
 // ─── Лимиты планов ────────────────────────────────────────────────────────────
 
-export const PLAN_LIMITS: Record<string, { employees: number; clients: number; label: string }> = {
-  free:    { employees: 1,   clients: 100,       label: 'Free'    },
-  starter: { employees: 3,   clients: 1_000,     label: 'Starter' },
-  pro:     { employees: 15,  clients: 999_999,   label: 'Pro'     },
-  agency:  { employees: 999, clients: 999_999,   label: 'Agency'  },
+export type NotificationChannel = 'email' | 'telegram' | 'whatsapp' | 'viber'
+
+export const PLAN_LIMITS: Record<string, {
+  employees: number
+  clients: number
+  pos_transactions: number   // per month; Infinity = unlimited
+  appointments: number       // per month; Infinity = unlimited
+  notifications: NotificationChannel[]
+  label: string
+}> = {
+  free: {
+    employees:        1,
+    clients:          50,
+    pos_transactions: 20,
+    appointments:     10,
+    notifications:    ['email'],
+    label:            'Free',
+  },
+  starter: {
+    employees:        3,
+    clients:          500,
+    pos_transactions: Infinity,
+    appointments:     Infinity,
+    notifications:    ['email', 'telegram', 'whatsapp'],
+    label:            'Starter',
+  },
+  pro: {
+    employees:        10,
+    clients:          Infinity,
+    pos_transactions: Infinity,
+    appointments:     Infinity,
+    notifications:    ['email', 'telegram', 'whatsapp', 'viber'],
+    label:            'Pro',
+  },
+  agency: {
+    employees:        Infinity,
+    clients:          Infinity,
+    pos_transactions: Infinity,
+    appointments:     Infinity,
+    notifications:    ['email', 'telegram', 'whatsapp', 'viber'],
+    label:            'Agency',
+  },
 }
 
 // ─── HTTP helper ──────────────────────────────────────────────────────────────

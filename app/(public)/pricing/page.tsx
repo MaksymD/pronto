@@ -48,20 +48,30 @@ const plans = [
 
 type FeatureValue = boolean | string
 
-const features: { label: string; values: FeatureValue[] }[] = [
-  { label: 'Team members',              values: ['1', '3', '10', 'Unlimited'] },
-  { label: 'Clients',                   values: ['50', '500', 'Unlimited', 'Unlimited'] },
-  { label: 'POS transactions / month',  values: ['20', 'Unlimited', 'Unlimited', 'Unlimited'] },
-  { label: 'Appointments / month',      values: ['10', 'Unlimited', 'Unlimited', 'Unlimited'] },
-  { label: 'Inventory management',      values: [true, true, true, true] },
-  { label: 'CRM & client history',      values: [false, true, true, true] },
-  { label: 'Custom booking page',       values: [false, true, true, true] },
-  { label: 'Telegram / Viber notifications', values: [false, false, true, true] },
-  { label: 'Advanced analytics',        values: [false, false, true, true] },
-  { label: 'Multiple locations',        values: [false, false, false, true] },
-  { label: 'API access',                values: [false, false, false, true] },
-  { label: 'Priority support',          values: [false, false, true, true] },
-  { label: 'Dedicated support & SLA',   values: [false, false, false, true] },
+const features: { label: string; values: FeatureValue[]; section?: string }[] = [
+  // Limits
+  { label: 'Team members',                        values: ['1', '3', '10', 'Unlimited'],  section: 'Limits' },
+  { label: 'Clients',                             values: ['50', '500', 'Unlimited', 'Unlimited'] },
+  { label: 'POS transactions / month',            values: ['20', 'Unlimited', 'Unlimited', 'Unlimited'] },
+  { label: 'Appointments / month',                values: ['10', 'Unlimited', 'Unlimited', 'Unlimited'] },
+  // Features
+  { label: 'Inventory management',                values: [true, true, true, true],       section: 'Features' },
+  { label: 'CRM & client history',                values: [false, true, true, true] },
+  { label: 'Online booking page',                 values: [false, true, true, true] },
+  { label: 'Advanced analytics dashboard',        values: [false, false, true, true] },
+  { label: 'Loyalty program',                     values: [false, false, true, true] },
+  { label: 'Custom domain',                       values: [false, false, true, true] },
+  { label: 'Multiple locations',                  values: [false, false, false, true] },
+  { label: 'White-label mode',                    values: [false, false, false, true] },
+  { label: 'API access',                          values: [false, false, false, true] },
+  // Notifications
+  { label: 'Email notifications',                 values: [true, true, true, true],       section: 'Notifications' },
+  { label: 'Telegram & WhatsApp notifications',   values: [false, true, true, true] },
+  { label: 'Viber notifications',                 values: [false, false, true, true] },
+  // Support
+  { label: 'Email support',                       values: [true, true, true, true],       section: 'Support' },
+  { label: 'Priority support',                    values: [false, false, true, true] },
+  { label: 'Dedicated support & SLA',             values: [false, false, false, true] },
 ]
 
 function FeatureCell({ value }: { value: FeatureValue }) {
@@ -77,7 +87,6 @@ export default function PricingPage() {
   return (
     <div className="py-16 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-14">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Simple, transparent pricing</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -143,23 +152,31 @@ export default function PricingPage() {
             </thead>
             <tbody>
               {features.map((feature, i) => (
-                <tr
-                  key={feature.label}
-                  className={`border-b border-gray-100 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/40'}`}
-                >
-                  <td className="px-6 py-3.5 text-gray-700">{feature.label}</td>
-                  {feature.values.map((val, j) => (
-                    <td key={j} className="px-4 py-3.5 text-center">
-                      <FeatureCell value={val} />
-                    </td>
-                  ))}
-                </tr>
+                <>
+                  {feature.section && (
+                    <tr key={`section-${feature.section}`} className="bg-gray-100 border-t border-gray-200">
+                      <td colSpan={5} className="px-6 py-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        {feature.section}
+                      </td>
+                    </tr>
+                  )}
+                  <tr
+                    key={feature.label}
+                    className={`border-b border-gray-100 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/40'}`}
+                  >
+                    <td className="px-6 py-3.5 text-gray-700">{feature.label}</td>
+                    {feature.values.map((val, j) => (
+                      <td key={j} className="px-4 py-3.5 text-center">
+                        <FeatureCell value={val} />
+                      </td>
+                    ))}
+                  </tr>
+                </>
               ))}
             </tbody>
           </table>
         </div>
 
-        {/* FAQ / Note */}
         <p className="text-center text-sm text-gray-500 mt-10">
           Prices shown in USD. Billing is handled securely by{' '}
           <span className="font-medium text-gray-700">Paddle</span>.
