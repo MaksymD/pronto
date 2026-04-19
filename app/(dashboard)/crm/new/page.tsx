@@ -4,7 +4,6 @@ import { Header } from '@/components/layout/header'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
-import { checkClientLimit } from '@/lib/plan-limits'
 import { NewClientForm } from './new-client-form'
 
 export default async function NewClientPage() {
@@ -14,11 +13,8 @@ export default async function NewClientPage() {
   if (!user) redirect('/login')
 
   const { data: business } = await supabase
-    .from('businesses').select('id, plan').eq('owner_id', user.id).maybeSingle()
+    .from('businesses').select('id').eq('owner_id', user.id).maybeSingle()
   if (!business) redirect('/dashboard')
-
-  const check = await checkClientLimit(supabase, business.id, business.plan)
-  if (!check.allowed) redirect('/crm?limit=clients')
 
   return (
     <>

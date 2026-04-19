@@ -5,10 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Pencil, Trash2, Check, Loader2, CheckCircle2, AlertCircle, Zap, Building2, Users, Eye, EyeOff } from 'lucide-react'
+import { Plus, Pencil, Trash2, Check, Loader2, CheckCircle2, AlertCircle, Zap, Users, Eye, EyeOff } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { startCheckout, openCustomerPortal } from './billing-actions'
-import { PLAN_LIMITS } from '@/lib/lemonsqueezy'
 
 interface Business {
   id: string; name: string; slug: string; type: string | null; phone: string | null
@@ -884,142 +882,45 @@ export function SettingsTabs({ business: initial, services: initServices, employ
       {/* Billing */}
       {tab === 'billing' && (
         <div className="space-y-4">
-          {process.env.NEXT_PUBLIC_DEPLOYMENT_MODE !== 'saas' ? (
-            /* ── Self-hosted mode ── */
-            <>
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-green-50 rounded-lg">
-                    <Zap className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <div className="text-base font-semibold text-gray-900">Self-hosted Plan</div>
-                    <div className="text-sm text-gray-500">You own this installation. No limits, no subscriptions, free forever.</div>
-                  </div>
-                  <Badge variant="success" className="ml-auto">Active</Badge>
-                </div>
-                <div className="space-y-2 mt-2">
-                  {[
-                    'Unlimited employees',
-                    'Unlimited clients',
-                    'All features included',
-                  ].map((item) => (
-                    <div key={item} className="flex items-center gap-2 text-sm text-gray-700">
-                      <Check className="w-4 h-4 text-green-500 shrink-0" />
-                      {item}
-                    </div>
-                  ))}
-                </div>
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-green-50 rounded-lg">
+                <Zap className="w-5 h-5 text-green-600" />
               </div>
-
-              <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
-                <div className="font-semibold text-gray-900 mb-1">Prefer a managed version?</div>
-                <p className="text-sm text-gray-500 mb-4">
-                  trypronto.app handles hosting and updates for you. Plans from $19/mo.
-                </p>
-                <a
-                  href="https://trypronto.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 border border-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg hover:bg-white hover:border-gray-400 transition-colors"
-                >
-                  Learn more →
-                </a>
+              <div>
+                <div className="text-base font-semibold text-gray-900">Self-hosted Plan</div>
+                <div className="text-sm text-gray-500">You own this installation. No limits, no subscriptions, free forever.</div>
               </div>
-            </>
-          ) : (
-            /* ── SaaS mode ── */
-            <>
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 className="font-semibold text-gray-900 mb-4">{t('billing.heading')}</h2>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-blue-50 rounded-lg"><Zap className="w-5 h-5 text-blue-600" /></div>
-                  <div>
-                    <div className="text-sm font-semibold text-gray-900 capitalize">
-                      {PLAN_LIMITS[biz.plan]?.label ?? biz.plan} {t('billing.planSuffix')}
-                    </div>
-                    {biz.plan_expires_at && (
-                      <div className="text-xs text-gray-500">
-                        {t('billing.renewsOn')} {new Date(biz.plan_expires_at).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
-                      </div>
-                    )}
-                  </div>
-                  <Badge variant={biz.plan === 'free' ? 'secondary' : 'success'} className="ml-auto">
-                    {biz.plan === 'free' ? t('billing.freePlan') : t('billing.activePlan')}
-                  </Badge>
+              <Badge variant="success" className="ml-auto">Active</Badge>
+            </div>
+            <div className="space-y-2 mt-2">
+              {[
+                'Unlimited employees',
+                'Unlimited clients',
+                'All features included',
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2 text-sm text-gray-700">
+                  <Check className="w-4 h-4 text-green-500 shrink-0" />
+                  {item}
                 </div>
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="bg-gray-50 rounded-lg p-3 flex items-center gap-2">
-                    <Users className="w-4 h-4 text-gray-400" />
-                    <div>
-                      <div className="text-xs text-gray-500">{t('billing.employees')}</div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {PLAN_LIMITS[biz.plan]?.employees === 999 ? 'Unlimited' : `Up to ${PLAN_LIMITS[biz.plan]?.employees}`}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-gray-50 rounded-lg p-3 flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-gray-400" />
-                    <div>
-                      <div className="text-xs text-gray-500">{t('billing.clients')}</div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {PLAN_LIMITS[biz.plan]?.clients >= 999_999 ? 'Unlimited' : `Up to ${PLAN_LIMITS[biz.plan]?.clients.toLocaleString()}`}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {biz.ls_customer_id && biz.plan !== 'free' && (
-                  <form action={openCustomerPortal}>
-                    <Button type="submit" variant="outline" size="sm">{t('billing.manageSubscription')}</Button>
-                  </form>
-                )}
-              </div>
+              ))}
+            </div>
+          </div>
 
-              {biz.plan !== 'agency' && (
-                <div className="grid sm:grid-cols-3 gap-3">
-                  {(['starter', 'pro', 'agency'] as const)
-                    .filter((p) => p !== biz.plan)
-                    .map((plan) => {
-                      const limits = PLAN_LIMITS[plan]
-                      const prices: Record<string, string> = { starter: '$19/mo', pro: '$39/mo', agency: '$79/mo' }
-                      return (
-                        <div key={plan} className={`bg-white rounded-xl border p-4 ${plan === 'pro' ? 'border-blue-300 ring-1 ring-blue-200' : 'border-gray-200'}`}>
-                          {plan === 'pro' && (
-                            <div className="text-xs font-semibold text-blue-600 mb-2 uppercase tracking-wide">{t('billing.mostPopular')}</div>
-                          )}
-                          <div className="font-semibold text-gray-900 capitalize mb-0.5">{limits.label}</div>
-                          <div className="text-lg font-bold text-gray-900 mb-2">{prices[plan]}</div>
-                          <div className="text-xs text-gray-500 mb-4 space-y-0.5">
-                            <div>👥 {limits.employees === 999 ? 'Unlimited employees' : `${limits.employees} employees`}</div>
-                            <div>🧑‍💼 {limits.clients >= 999_999 ? 'Unlimited clients' : `${limits.clients.toLocaleString()} clients`}</div>
-                          </div>
-                          {plan === biz.plan ? (
-                            <div className="text-xs text-center text-gray-400">{t('billing.currentPlan')}</div>
-                          ) : (
-                            <form action={startCheckout.bind(null, plan)}>
-                              <Button type="submit" size="sm" className="w-full" variant={plan === 'pro' ? 'default' : 'outline'}>
-                                {t('billing.upgrade')}
-                              </Button>
-                            </form>
-                          )}
-                        </div>
-                      )
-                    })}
-                </div>
-              )}
-
-              {searchParams.get('success') && (
-                <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-3">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" /> {t('billing.successMessage')}
-                </div>
-              )}
-              {searchParams.get('error') && (
-                <div className="flex items-center gap-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
-                  <AlertCircle className="w-4 h-4 shrink-0" /> {t('billing.errorMessage')}
-                </div>
-              )}
-            </>
-          )}
+          <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
+            <div className="font-semibold text-gray-900 mb-1">Prefer a managed version?</div>
+            <p className="text-sm text-gray-500 mb-4">
+              trypronto.app handles hosting and updates for you. Plans from $19/mo.
+            </p>
+            <a
+              href="https://trypronto.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 border border-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg hover:bg-white hover:border-gray-400 transition-colors"
+            >
+              Learn more →
+            </a>
+          </div>
         </div>
       )}
 

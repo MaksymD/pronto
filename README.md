@@ -34,7 +34,6 @@ No monthly fees. No commission on sales. Your data stays on your server.
 | **WhatsApp** | Direct messages to clients via Meta Cloud API — confirmations, reminders, thank-you, re-activation, birthday. |
 | **Email Notifications** | Booking confirmation, 24h & 1h reminders, thank-you, re-activation, birthday greetings. |
 | **Settings** | Services, employees, working hours, business info, notification channels. |
-| **Multi-tenant ready** | One installation can serve multiple businesses (Supabase RLS). Self-hosted installs support custom domain and logo out of the box. |
 
 ---
 
@@ -134,7 +133,7 @@ CRON_SECRET=replace-with-random-string
 # META_WHATSAPP_ACCESS_TOKEN=
 ```
 
-See `.env.example` for the full list including Telegram, Viber, and optional SaaS-mode settings.
+See `.env.example` for the full list including Telegram, Viber, and all optional settings.
 
 ### Supabase Setup
 
@@ -346,9 +345,8 @@ pronto/
 ├── app/
 │   ├── (auth)/          # Login, Register, Check email
 │   ├── (dashboard)/     # POS, CRM, Inventory, Booking, Settings, Dashboard
-│   ├── api/             # Email, Telegram/Viber webhooks, Cron, Billing
-│   ├── book/[slug]/     # Public booking page (no login required)
-│   └── onboarding/      # First-run setup wizard
+│   ├── api/             # Email, Telegram/Viber webhooks, Cron
+│   └── book/[slug]/     # Public booking page (no login required)
 ├── components/
 │   ├── layout/          # Sidebar, Header
 │   └── ui/              # Button, Badge, Card, DatePicker...
@@ -384,8 +382,6 @@ Need help getting started? I offer:
 
 - **Installation & setup** — I'll deploy Pronto on your server, configure all integrations, and get you running ($100–200)
 - **Customization** — custom features, branding, or integrations for your specific business ($150–400)
-- **Managed hosting** — don't want to manage a server? Use the hosted version at [trypronto.app](https://trypronto.app) from $19/mo
-
 Contact: [ukv2179@gmail.com](mailto:ukv2179@gmail.com) or open an issue with the `services` label.
 
 ---
