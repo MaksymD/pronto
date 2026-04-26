@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
       hasTelegram = !!existing.telegram_id
       hasViber = !!existing.viber_user_id
       // BUG-10: update both name and email if different from stored value
-      const updates: Record<string, string> = {}
+      const updates: { name?: string; email?: string } = {}
       if (name && name !== existing.name) updates.name = name
       if (email && email !== existing.email) updates.email = email
       if (Object.keys(updates).length > 0) {
