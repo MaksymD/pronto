@@ -99,24 +99,37 @@ export async function POST(req: NextRequest) {
   // Upsert client
   let clientId: string | null = null
   let hasTelegram = false
+  let hasViber = false
   if (phone || email) {
-    const filter = phone ? `phone.eq.${phone}` : `email.eq.${email}`
-    const { data: existing } = await supabase
+    // BUG-8: search by all provided fields combined — avoids duplicate clients when
+    // both phone and email are submitted but each matches a different existing record.
+    const orParts: string[] = []
+    if (phone) orParts.push(`phone.eq.${phone}`)
+    if (email) orParts.push(`email.eq.${email}`)
+
+    const { data: matches } = await supabase
       .from('clients')
-      .select('id, name, telegram_id')
+      .select('id, name, email, telegram_id, viber_user_id')
       .eq('business_id', businessId)
-      .or(filter)
-      .maybeSingle()
+      .or(orParts.join(','))
+      .limit(1)
+
+    const existing = matches?.[0] ?? null
 
     if (existing) {
       clientId = existing.id
       hasTelegram = !!existing.telegram_id
-      // Keep the client record current — update the name if the booking provides a different one
-      if (name && name !== existing.name) {
-        await supabase.from('clients').update({ name }).eq('id', existing.id)
+      hasViber = !!existing.viber_user_id
+      // BUG-10: update both name and email if different from stored value
+      const updates: Record<string, string> = {}
+      if (name && name !== existing.name) updates.name = name
+      if (email && email !== existing.email) updates.email = email
+      if (Object.keys(updates).length > 0) {
+        await supabase.from('clients').update(updates).eq('id', existing.id)
       }
     } else {
-      const { data: newClient } = await supabase
+      // BUG-9: fail fast if client creation fails — never book without a valid clientId
+      const { data: newClient, error: insertErr } = await supabase
         .from('clients')
         .insert({
           business_id: businessId,
@@ -126,7 +139,11 @@ export async function POST(req: NextRequest) {
         })
         .select('id')
         .single()
-      clientId = newClient?.id ?? null
+      if (insertErr || !newClient) {
+        console.error('[api/book] client insert error:', insertErr?.message)
+        return NextResponse.json({ error: 'client_creation_failed' }, { status: 500 })
+      }
+      clientId = newClient.id
     }
   }
 
@@ -180,5 +197,5 @@ export async function POST(req: NextRequest) {
     console.error('[api/book] email/confirm fetch error:', err)
   })
 
-  return NextResponse.json({ appointmentId: appt.id, clientId, hasTelegram })
+  return NextResponse.json({ appointmentId: appt.id, clientId, hasTelegram, hasViber })
 }

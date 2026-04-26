@@ -68,6 +68,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
   const [bookingError, setBookingError] = useState<string | null>(null)
   const [clientId, setClientId] = useState<string | null>(null)
   const [clientHasTelegram, setClientHasTelegram] = useState(false)
+  const [clientHasViber, setClientHasViber] = useState(false)
 
   // Slot state
   const [availableSlots, setAvailableSlots] = useState<string[]>([])
@@ -81,7 +82,8 @@ export function PublicBookingForm({ business, services, employees, workingHours,
   })
 
   const closedWeekdays = effectiveHours.filter((h) => !h.is_open).map((h) => h.day_of_week)
-  const today = new Date().toISOString().slice(0, 10)
+  const now = new Date()
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 
   // Reload slots whenever date, service, or selected employee changes
   useEffect(() => {
@@ -112,7 +114,6 @@ export function PublicBookingForm({ business, services, employees, workingHours,
     let slots = generateSlots(dayHours.open_time, dayHours.close_time, svc.duration_min)
 
     if (selectedDate === today) {
-      const now = new Date()
       const nowMin = now.getHours() * 60 + now.getMinutes() + 30
       slots = slots.filter((slot) => {
         const [sh, sm] = slot.split(':').map(Number)
@@ -203,6 +204,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       const data = await res.json()
       setClientId(data.clientId ?? null)
       setClientHasTelegram(data.hasTelegram ?? false)
+      setClientHasViber(data.hasViber ?? false)
       setStep('done')
       setSaving(false)
     } catch {
@@ -239,6 +241,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
     setAvailableSlots([])
     setClientId(null)
     setClientHasTelegram(false)
+    setClientHasViber(false)
     setBookingError(null)
   }
 
@@ -276,13 +279,13 @@ export function PublicBookingForm({ business, services, employees, workingHours,
         </p>
         <p className="text-sm text-gray-500 mb-6">{t('success.body')}</p>
 
-        {/* Messenger opt-in — hidden if client already has Telegram connected */}
-        {!clientHasTelegram && (telegramLink || viberLink) && (
+        {/* Messenger opt-in — each channel shown independently if not already connected */}
+        {((!clientHasTelegram && telegramLink) || (!clientHasViber && viberLink)) && (
           <div className="border border-gray-100 rounded-xl p-4 mb-6 bg-gray-50 text-left">
             <p className="text-sm font-medium text-gray-700 mb-1">{t('success.optInHeading')}</p>
             <p className="text-xs text-gray-500 mb-3">{t('success.optInSub')}</p>
             <div className="flex flex-col gap-2">
-              {telegramLink && (
+              {!clientHasTelegram && telegramLink && (
                 <a
                   href={telegramLink}
                   target="_blank"
@@ -293,7 +296,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
                   {t('success.telegramButton')}
                 </a>
               )}
-              {viberLink && (
+              {!clientHasViber && viberLink && (
                 <a
                   href={viberLink}
                   target="_blank"
@@ -480,7 +483,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       {/* ── Step 4: Contact ───────────────────────────────────────────────── */}
       {step === 'contact' && (
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <button onClick={() => setStep('datetime')} className="text-xs text-gray-400 hover:text-gray-600 mb-4">
+          <button onClick={() => { setStep('datetime'); setBookingError(null) }} className="text-xs text-gray-400 hover:text-gray-600 mb-4">
             {t('contact.back')}
           </button>
           <h2 className="font-semibold text-gray-900 mb-4">{t('contact.heading')}</h2>
