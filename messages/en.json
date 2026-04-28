@@ -164,6 +164,7 @@
       "pending": "pending",
       "confirmed": "confirmed",
       "completed": "completed",
+      "paid": "paid",
       "cancelled": "cancelled",
       "no_show": "no show"
     }
@@ -252,6 +253,7 @@
       "pending": "pending",
       "confirmed": "confirmed",
       "completed": "completed",
+      "paid": "paid",
       "cancelled": "cancelled",
       "no_show": "no show"
     },
@@ -551,6 +553,7 @@
       "pending": "pending",
       "confirmed": "confirmed",
       "completed": "completed",
+      "paid": "paid",
       "cancelled": "cancelled",
       "no_show": "no show"
     }
