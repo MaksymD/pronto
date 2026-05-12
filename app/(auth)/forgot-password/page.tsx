@@ -1,5 +1,6 @@
 import { requestPasswordReset } from './actions'
 import Link from 'next/link'
+import { SubmitButton } from './SubmitButton'
 
 export default function ForgotPasswordPage({
   searchParams,
@@ -43,12 +44,7 @@ export default function ForgotPasswordPage({
             placeholder="you@example.com"
           />
         </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors"
-        >
-          Send reset link
-        </button>
+        <SubmitButton />
       </form>
 
       <div className="mt-6">
