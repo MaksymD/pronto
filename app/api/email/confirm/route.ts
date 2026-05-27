@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { sendBookingConfirmation, formatEmailDate, formatEmailTime } from '@/lib/email'
-import { sendTelegramMessage, tplNewBooking } from '@/lib/telegram'
+import { sendTelegramMessage, tplNewBooking, tplReminderClient as tgTplConfirmClient } from '@/lib/telegram'
 import { sendViberMessage, tplNewBooking as viberTplNewBooking } from '@/lib/viber'
 import { sendWhatsAppMessage, tplBookingConfirmation as waTplBookingConfirmation } from '@/lib/whatsapp'
 
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
 
     const { data: biz } = await supabase
       .from('businesses')
-      .select('name, address, slug, timezone, telegram_bot_token, telegram_chat_id, viber_bot_token, viber_chat_id')
+      .select('name, address, slug, timezone, telegram_bot_token, telegram_chat_id, viber_bot_token, viber_chat_id, meta_whatsapp_phone_number_id, meta_whatsapp_access_token')
       .eq('id', appt.business_id)
       .single()
 
@@ -163,6 +163,9 @@ export async function POST(req: NextRequest) {
     }
 
     // ── WhatsApp → клиенту ──────────────────────────────────────────────────
+    const waCredentials = biz?.meta_whatsapp_phone_number_id && biz?.meta_whatsapp_access_token
+      ? { phoneNumberId: biz.meta_whatsapp_phone_number_id, accessToken: biz.meta_whatsapp_access_token }
+      : undefined
     if (client?.whatsapp_number) {
       await sendWhatsAppMessage(
         client.whatsapp_number,
@@ -174,7 +177,8 @@ export async function POST(req: NextRequest) {
           businessName: biz?.name ?? '',
           employeeName: employee?.name,
           address: biz?.address ?? undefined,
-        })
+        }),
+        waCredentials
       )
     }
 
@@ -186,9 +190,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ sent: true, email: 'skipped: no client email' })
     }
 
-    // BUG-6: SELECT first → send → INSERT. This way a failed send remains retryable,
-    // and we never double-send if the route is called twice for the same appointment.
-    const { data: existingLog } = await supabase
+    // Check dedup BEFORE sending — log record is written only after a successful send,
+    // so a failed send leaves no trace and can be retried freely.
+    const { data: alreadySent } = await supabase
       .from('notification_log')
       .select('id')
       .eq('business_id', appt.business_id)
@@ -197,7 +201,7 @@ export async function POST(req: NextRequest) {
       .eq('channel', 'email')
       .maybeSingle()
 
-    if (existingLog) {
+    if (alreadySent) {
       return NextResponse.json({ sent: true, email: 'skipped: already sent' })
     }
 
@@ -212,12 +216,16 @@ export async function POST(req: NextRequest) {
       address: biz?.address ?? undefined,
     })
 
-    await supabase.from('notification_log').insert({
+    // Record only after a confirmed successful send
+    const { error: logErr } = await supabase.from('notification_log').insert({
       business_id: appt.business_id,
       ref_id: appt.id,
       type: 'confirm',
       channel: 'email',
     })
+    if (logErr && logErr.code !== '23505') {
+      console.error('[email/confirm] notification_log insert error:', logErr.message)
+    }
 
     return NextResponse.json({ sent: true })
   } catch (err) {
