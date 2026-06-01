@@ -3,14 +3,15 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { formatCurrency, uses12HourClock } from '@/lib/utils'
-import { CheckCircle2, ChevronRight, Loader2, UserCircle2 } from 'lucide-react'
+import { CalendarPlus, CheckCircle2, ChevronRight, Loader2, UserCircle2 } from 'lucide-react'
+import { buildGCalUrl } from '@/lib/gcal'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
 import { useTranslations } from 'next-intl'
 
 interface Service { id: string; name: string; description: string | null; price: number; duration_min: number; category: string | null; capacity: number }
 interface Employee { id: string; name: string }
-interface Business { id: string; name: string; currency: string; slug: string; timezone?: string | null }
+interface Business { id: string; name: string; currency: string; slug: string; timezone: string | null; address?: string | null }
 interface DayHours { day_of_week: number; is_open: boolean; open_time: string; close_time: string }
 
 interface Props {
@@ -33,16 +34,6 @@ const DEFAULT_HOURS: DayHours[] = [0, 1, 2, 3, 4, 5, 6].map((dow) => ({
   open_time: '09:00',
   close_time: '20:00',
 }))
-
-/** Convert a UTC ISO timestamp to minutes-since-midnight in the given IANA timezone. */
-function toBusinessMin(iso: string, tz: string): number {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false,
-  }).formatToParts(new Date(iso))
-  const h = parseInt(parts.find((p) => p.type === 'hour')?.value ?? '0')
-  const m = parseInt(parts.find((p) => p.type === 'minute')?.value ?? '0')
-  return (h % 24) * 60 + m
-}
 
 /** Generate time slots from open_time to close_time with step = durationMin */
 function generateSlots(openTime: string, closeTime: string, durationMin: number): string[] {
@@ -78,7 +69,6 @@ export function PublicBookingForm({ business, services, employees, workingHours,
   const [bookingError, setBookingError] = useState<string | null>(null)
   const [clientId, setClientId] = useState<string | null>(null)
   const [clientHasTelegram, setClientHasTelegram] = useState(false)
-  const [clientHasViber, setClientHasViber] = useState(false)
 
   // Slot state
   const [availableSlots, setAvailableSlots] = useState<string[]>([])
@@ -92,8 +82,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
   })
 
   const closedWeekdays = effectiveHours.filter((h) => !h.is_open).map((h) => h.day_of_week)
-  const now = new Date()
-  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+  const today = new Date().toISOString().slice(0, 10)
 
   // Reload slots whenever date, service, or selected employee changes
   useEffect(() => {
@@ -124,6 +113,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
     let slots = generateSlots(dayHours.open_time, dayHours.close_time, svc.duration_min)
 
     if (selectedDate === today) {
+      const now = new Date()
       const nowMin = now.getHours() * 60 + now.getMinutes() + 30
       slots = slots.filter((slot) => {
         const [sh, sm] = slot.split(':').map(Number)
@@ -138,7 +128,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       const { data: booked } = await supabase.rpc('get_booked_slots', {
         p_business_id: business.id,
         p_date: selectedDate,
-        p_employee_id: employeeId || null,
+        p_employee_id: capacity > 1 ? null : (employeeId || null),
       })
 
       slots = slots.filter((slot) => {
@@ -146,10 +136,21 @@ export function PublicBookingForm({ business, services, employees, workingHours,
         const slotStartMin = sh * 60 + sm
         const slotEndMin = slotStartMin + svc.duration_min
 
-        const tz = business.timezone ?? 'UTC'
         const bookedCount = (booked ?? []).filter(({ starts_at, ends_at }: { starts_at: string; ends_at: string }) => {
-          const bStartMin = toBusinessMin(starts_at, tz)
-          const bEndMin   = toBusinessMin(ends_at, tz)
+          // Convert UTC timestamps to business-local minutes so the overlap check
+          // is in the same coordinate system as the slot grid (which is in business hours).
+          const toBusinessMin = (iso: string) => {
+            const tz = business.timezone ?? 'UTC'
+            const parts = new Intl.DateTimeFormat('en-US', {
+              timeZone: tz,
+              hour: '2-digit', minute: '2-digit', hour12: false,
+            }).formatToParts(new Date(iso))
+            const h = parseInt(parts.find((p) => p.type === 'hour')?.value ?? '0')
+            const m = parseInt(parts.find((p) => p.type === 'minute')?.value ?? '0')
+            return (h % 24) * 60 + m
+          }
+          const bStartMin = toBusinessMin(starts_at)
+          const bEndMin   = toBusinessMin(ends_at)
           return slotStartMin < bEndMin && slotEndMin > bStartMin
         }).length
 
@@ -227,7 +228,6 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       const data = await res.json()
       setClientId(data.clientId ?? null)
       setClientHasTelegram(data.hasTelegram ?? false)
-      setClientHasViber(data.hasViber ?? false)
       setStep('done')
       setSaving(false)
     } catch {
@@ -264,7 +264,6 @@ export function PublicBookingForm({ business, services, employees, workingHours,
     setAvailableSlots([])
     setClientId(null)
     setClientHasTelegram(false)
-    setClientHasViber(false)
     setBookingError(null)
   }
 
@@ -302,13 +301,13 @@ export function PublicBookingForm({ business, services, employees, workingHours,
         </p>
         <p className="text-sm text-gray-500 mb-6">{t('success.body')}</p>
 
-        {/* Messenger opt-in — each channel shown independently if not already connected */}
-        {((!clientHasTelegram && telegramLink) || (!clientHasViber && viberLink)) && (
+        {/* Messenger opt-in — hidden if client already has Telegram connected */}
+        {!clientHasTelegram && (telegramLink || viberLink) && (
           <div className="border border-gray-100 rounded-xl p-4 mb-6 bg-gray-50 text-left">
             <p className="text-sm font-medium text-gray-700 mb-1">{t('success.optInHeading')}</p>
             <p className="text-xs text-gray-500 mb-3">{t('success.optInSub')}</p>
             <div className="flex flex-col gap-2">
-              {!clientHasTelegram && telegramLink && (
+              {telegramLink && (
                 <a
                   href={telegramLink}
                   target="_blank"
@@ -319,7 +318,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
                   {t('success.telegramButton')}
                 </a>
               )}
-              {!clientHasViber && viberLink && (
+              {viberLink && (
                 <a
                   href={viberLink}
                   target="_blank"
@@ -334,9 +333,29 @@ export function PublicBookingForm({ business, services, employees, workingHours,
           </div>
         )}
 
-        <Button variant="outline" onClick={resetAll}>
-          {t('success.bookAnother')}
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2 justify-center">
+          <a
+            href={buildGCalUrl({
+              businessName: business.name,
+              serviceName: selectedService?.name ?? '',
+              employeeName: selectedEmployeeObj?.name,
+              date,
+              time: time ?? '',
+              durationMin: selectedService?.duration_min ?? 60,
+              timezone: business.timezone,
+              address: business.address,
+            })}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            <CalendarPlus className="w-4 h-4" />
+            Add to Google Calendar
+          </a>
+          <Button variant="outline" onClick={resetAll}>
+            {t('success.bookAnother')}
+          </Button>
+        </div>
       </div>
     )
   }
@@ -506,7 +525,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       {/* ── Step 4: Contact ───────────────────────────────────────────────── */}
       {step === 'contact' && (
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <button onClick={() => { setStep('datetime'); setBookingError(null) }} className="text-xs text-gray-400 hover:text-gray-600 mb-4">
+          <button onClick={() => setStep('datetime')} className="text-xs text-gray-400 hover:text-gray-600 mb-4">
             {t('contact.back')}
           </button>
           <h2 className="font-semibold text-gray-900 mb-4">{t('contact.heading')}</h2>

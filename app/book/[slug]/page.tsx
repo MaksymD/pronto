@@ -25,7 +25,7 @@ export default async function PublicBookingPage({ params }: { params: { slug: st
   // Public data only — no secrets passed to the client component
   const { data: business } = await supabase
     .from('businesses')
-    .select('id, name, type, phone, logo_url, currency, slug, timezone')
+    .select('id, name, type, phone, logo_url, currency, slug, timezone, address')
     .eq('slug', params.slug)
     .maybeSingle()
 
