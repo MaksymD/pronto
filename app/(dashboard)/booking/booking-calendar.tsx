@@ -1,13 +1,15 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { formatInBusinessTimezone, uses12HourClock } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
-import { ChevronLeft, ChevronRight, ExternalLink, CreditCard } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink, CreditCard, AlertCircle, Palette } from 'lucide-react'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { sanitizeText } from '@/lib/sanitize'
 import {
   DndContext,
   DragEndEvent,
@@ -51,6 +53,39 @@ function wallclockToUtc(year: number, month: number, day: number, hour: number, 
   return new Date(Date.UTC(year, month - 1, day, hour, minute) - offsetMs)
 }
 
+const EMPLOYEE_PALETTE = [
+  { bg: '#bbf7d0', text: '#14532d' },
+  { bg: '#bae6fd', text: '#0c4a6e' },
+  { bg: '#ddd6fe', text: '#3b0764' },
+  { bg: '#fecdd3', text: '#881337' },
+  { bg: '#fde68a', text: '#713f12' },
+  { bg: '#99f6e4', text: '#134e4a' },
+]
+
+const NO_EMPLOYEE_COLOR = { bg: '#f1f5f9', text: '#475569' }
+
+function getEmployeeColor(employeeId: string | null | undefined) {
+  if (!employeeId) return NO_EMPLOYEE_COLOR
+  let hash = 0
+  for (let i = 0; i < employeeId.length; i++) {
+    hash = (hash * 31 + employeeId.charCodeAt(i)) >>> 0
+  }
+  return EMPLOYEE_PALETTE[hash % EMPLOYEE_PALETTE.length]
+}
+
+const STATUS_STRIPE: Record<string, string> = {
+  pending:   '#94a3b8',
+  confirmed: '#16a34a',
+  completed: '#3b82f6',
+  paid:      '#0d9488',
+  cancelled: '#ef4444',
+  no_show:   '#f97316',
+}
+
+function getStatusStripe(status: string): string {
+  return STATUS_STRIPE[status.toLowerCase()] ?? STATUS_STRIPE.pending
+}
+
 const SOURCE_BADGE: Record<string, { label: string; pill: string }> = {
   online:   { label: 'Online',   pill: 'bg-blue-100 text-blue-700' },
   manual:   { label: 'Manual',   pill: 'bg-gray-100 text-gray-500' },
@@ -67,6 +102,9 @@ interface Props {
   businessId: string; slug: string; timezone: string
   appointments: Appointment[]; employees: Employee[]; services: Service[]; clients: Client[]
   businessHours: BusinessHour[]
+  plan: string
+  monthlyBookingCount: number
+  bookingLimit: number
 }
 
 // ─── Draggable appointment card ────────────────────────────────────────────────
@@ -119,7 +157,7 @@ function getMonday(date: Date) {
   return d
 }
 
-export function BookingCalendar({ businessId, slug, timezone, appointments: initial, employees, services, clients: initialClients, businessHours }: Props) {
+export function BookingCalendar({ businessId, slug, timezone, appointments: initial, employees, services, clients: initialClients, businessHours, plan, monthlyBookingCount: initialBookingCount, bookingLimit }: Props) {
   const supabase = createClient()
   const router = useRouter()
   const t = useTranslations('booking')
@@ -156,6 +194,8 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
   }, [businessHours, appointments, timezone])
   const [showForm, setShowForm] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
+  const [bookingCount, setBookingCount] = useState(initialBookingCount)
+  const bookingLimitReached = plan === 'free' && bookingCount >= bookingLimit
   const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US'
   const is12h = uses12HourClock(locale)
 
@@ -204,6 +244,9 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
   const [selectedAppt, setSelectedAppt] = useState<Appointment | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [draggedAppt, setDraggedAppt] = useState<Appointment | null>(null)
+  const [assignError, setAssignError] = useState<string | null>(null)
+  const [showLegend, setShowLegend] = useState(false)
+  const legendRef = useRef<HTMLDivElement>(null)
 
   // day_of_week: 0=Sun, 1=Mon … 6=Sat (JS getDay() convention)
   function isDayClosed(date: Date) {
@@ -326,11 +369,12 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
     const { data, error } = await supabase.from('appointments').insert({
       business_id: businessId, client_id: form.client_id || null, employee_id: form.employee_id || null,
       service_id: form.service_id, starts_at: startsAt.toISOString(), ends_at: endsAt.toISOString(),
-      notes: form.notes || null, price: service.price, status: 'confirmed', source: 'manual',
+      notes: form.notes ? sanitizeText(form.notes) || null : null, price: service.price, status: 'confirmed', source: 'manual',
     }).select('id, starts_at, ends_at, status, source, notes, clients(id, name), employees(id, name), services(id, name, price)').single()
 
     if (!error && data) {
       setAppointments((prev) => [...prev, data as Appointment])
+      setBookingCount((n) => n + 1)
       setShowForm(false)
       setFormError(null)
       setForm({ client_id: '', employee_id: '', service_id: '', date: '', hour: '', minute: '00', period: 'AM', notes: '' })
@@ -365,6 +409,44 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
     router.refresh()
   }
 
+  async function assignEmployee(apptId: string, employeeId: string) {
+    setAssignError(null)
+    const res = await fetch(`/api/appointments/${apptId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ employee_id: employeeId || null }),
+    })
+    if (!res.ok) {
+      setAssignError('Failed to update employee. Please try again.')
+      return
+    }
+    const updated = await res.json()
+    const newEmployee = updated.employees ?? null
+    setAppointments((prev) =>
+      prev.map((a) => a.id === apptId ? { ...a, employees: newEmployee } : a)
+    )
+    setSelectedAppt((a) => a?.id === apptId ? { ...a, employees: newEmployee } : a)
+    router.refresh()
+  }
+
+  useEffect(() => {
+    if (!showLegend) return
+    function handleClick(e: MouseEvent) {
+      if (legendRef.current && !legendRef.current.contains(e.target as Node)) {
+        setShowLegend(false)
+      }
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setShowLegend(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('keydown', handleKey)
+    }
+  }, [showLegend])
+
   return (
     <div className="flex-1 flex flex-col min-h-0 p-3 sm:p-6 gap-4">
       {/* Toolbar */}
@@ -386,6 +468,51 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
             className="flex items-center gap-1 text-xs text-blue-600 hover:underline">
             <ExternalLink className="w-3 h-3" /> {t('calendar.publicPage')}
           </a>
+          {/* Legend button */}
+          <div className="relative" ref={legendRef}>
+            <button
+              onClick={() => setShowLegend((v) => !v)}
+              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
+              title="Color legend"
+            >
+              <Palette className="w-4 h-4" />
+            </button>
+            {showLegend && (
+              <div className="absolute right-0 top-8 z-30 w-56 bg-white rounded-xl border border-gray-200 shadow-lg p-3">
+                <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Team colors</div>
+                {employees.length === 0 ? (
+                  <p className="text-xs text-gray-400">No team members yet</p>
+                ) : (
+                  <div className="space-y-1.5 mb-3">
+                    {employees.map((emp) => {
+                      const c = getEmployeeColor(emp.id)
+                      return (
+                        <div key={emp.id} className="flex items-center gap-2">
+                          <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: c.bg, border: '1px solid rgba(0,0,0,0.1)' }} />
+                          <span className="text-xs text-gray-700 truncate">{emp.name}</span>
+                        </div>
+                      )
+                    })}
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: NO_EMPLOYEE_COLOR.bg, border: '1px solid rgba(0,0,0,0.1)' }} />
+                      <span className="text-xs text-gray-500 truncate">Unassigned</span>
+                    </div>
+                  </div>
+                )}
+                <div className="border-t border-gray-100 pt-2 mt-1">
+                  <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Appointment status</div>
+                  <div className="space-y-1.5">
+                    {Object.entries(STATUS_STRIPE).map(([status, color]) => (
+                      <div key={status} className="flex items-center gap-2">
+                        <span className="w-1 h-4 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                        <span className="text-xs text-gray-700 capitalize">{status.replace('_', ' ')}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
           <Button size="sm" onClick={() => openForm()}>{t('newAppointment')}</Button>
         </div>
       </div>
@@ -430,25 +557,30 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                           }
                         }}
                       >
-                        {cellAppts.map((a) => (
-                          <DraggableAppt key={a.id} id={a.id}>
-                            <div
-                              onClick={(e) => { e.stopPropagation(); setSelectedAppt(a) }}
-                              className={`rounded border px-1 py-0.5 mb-0.5 cursor-grab active:cursor-grabbing text-xs ${statusColors[a.status] ?? 'bg-gray-100'}`}
-                            >
-                              <div className="font-semibold truncate">{a.clients?.name ?? (a.source === 'online' ? 'Online' : t('walkIn'))}</div>
-                              <div className="truncate">{a.services?.name} · {formatInBusinessTimezone(a.starts_at, timezone, 'time')}</div>
-                              {a.employees?.name && (
-                                <div className="truncate text-[10px] opacity-70">{a.employees.name}</div>
-                              )}
-                              {a.source && SOURCE_BADGE[a.source] && (
-                                <span className={`inline-block mt-0.5 text-[9px] leading-tight px-1 rounded font-medium ${SOURCE_BADGE[a.source].pill}`}>
-                                  {SOURCE_BADGE[a.source].label}
-                                </span>
-                              )}
-                            </div>
-                          </DraggableAppt>
-                        ))}
+                        {cellAppts.map((a) => {
+                          const empColor = getEmployeeColor(a.employees?.id)
+                          const stripe = getStatusStripe(a.status)
+                          return (
+                            <DraggableAppt key={a.id} id={a.id}>
+                              <div
+                                onClick={(e) => { e.stopPropagation(); setSelectedAppt(a) }}
+                                className="rounded px-1 py-0.5 mb-0.5 cursor-grab active:cursor-grabbing text-xs"
+                                style={{ backgroundColor: empColor.bg, color: empColor.text, borderLeft: `5px solid ${stripe}`, borderTop: '1px solid rgba(0,0,0,0.08)', borderRight: '1px solid rgba(0,0,0,0.08)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}
+                              >
+                                <div className="font-semibold truncate">{a.clients?.name ?? (a.source === 'online' ? 'Online' : t('walkIn'))}</div>
+                                <div className="truncate">{a.services?.name} · {formatInBusinessTimezone(a.starts_at, timezone, 'time')}</div>
+                                {a.employees?.name && (
+                                  <div className="truncate text-[10px] opacity-70">{a.employees.name}</div>
+                                )}
+                                {a.source && SOURCE_BADGE[a.source] && (
+                                  <span className={`inline-block mt-0.5 text-[9px] leading-tight px-1 rounded font-medium ${SOURCE_BADGE[a.source].pill}`}>
+                                    {SOURCE_BADGE[a.source].label}
+                                  </span>
+                                )}
+                              </div>
+                            </DraggableAppt>
+                          )
+                        })}
                       </DroppableCell>
                     )
                   })}
@@ -460,15 +592,20 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
 
         {/* Drag overlay — shown while dragging */}
         <DragOverlay>
-          {draggedAppt && (
-            <div className={`rounded border px-2 py-1 text-xs shadow-lg w-28 ${statusColors[draggedAppt.status] ?? 'bg-gray-100'}`}>
-              <div className="font-semibold truncate">{draggedAppt.clients?.name ?? (draggedAppt.source === 'online' ? 'Online' : t('walkIn'))}</div>
-              <div className="truncate">{draggedAppt.services?.name}</div>
-              {draggedAppt.employees?.name && (
-                <div className="truncate opacity-70">{draggedAppt.employees.name}</div>
-              )}
-            </div>
-          )}
+          {draggedAppt && (() => {
+            const empColor = getEmployeeColor(draggedAppt.employees?.id)
+            const stripe = getStatusStripe(draggedAppt.status)
+            return (
+              <div className="rounded px-2 py-1 text-xs shadow-lg w-28"
+                style={{ backgroundColor: empColor.bg, color: empColor.text, borderLeft: `5px solid ${stripe}`, borderTop: '1px solid rgba(0,0,0,0.08)', borderRight: '1px solid rgba(0,0,0,0.08)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
+                <div className="font-semibold truncate">{draggedAppt.clients?.name ?? (draggedAppt.source === 'online' ? 'Online' : t('walkIn'))}</div>
+                <div className="truncate">{draggedAppt.services?.name}</div>
+                {draggedAppt.employees?.name && (
+                  <div className="truncate opacity-70">{draggedAppt.employees.name}</div>
+                )}
+              </div>
+            )
+          })()}
         </DragOverlay>
       </DndContext>
 
@@ -477,6 +614,24 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
             <h2 className="text-base font-semibold mb-4">{t('form.heading')}</h2>
+            {bookingLimitReached ? (
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3">
+                  <AlertCircle className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-orange-900">You&apos;ve used all {bookingLimit} bookings this month on the Free plan.</p>
+                    <p className="text-sm text-orange-700 mt-0.5">Upgrade to Starter for unlimited bookings.</p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" className="flex-1" onClick={() => setShowForm(false)}>Close</Button>
+                  <Link href="/pricing" className="flex-1">
+                    <Button className="w-full">Upgrade →</Button>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+            <>
             <div className="space-y-3">
               <div>
                 <label className="text-xs text-gray-500 font-medium">{t('form.serviceLabel')}</label>
@@ -586,6 +741,8 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                 {saving ? t('form.saving') : t('form.save')}
               </Button>
             </div>
+            </>
+            )}
           </div>
         </div>
       )}
@@ -598,16 +755,31 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
             <p className="text-sm text-gray-500 mb-4">
               {selectedAppt.services?.name} · {formatInBusinessTimezone(selectedAppt.starts_at, timezone, 'time')} – {formatInBusinessTimezone(selectedAppt.ends_at, timezone, 'time')}
             </p>
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              {selectedAppt.employees && (
-                <p className="text-sm text-gray-600">{t('detail.employeeLabel')} {selectedAppt.employees.name}</p>
-              )}
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
               {selectedAppt.source && SOURCE_BADGE[selectedAppt.source] && (
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${SOURCE_BADGE[selectedAppt.source].pill}`}>
                   {SOURCE_BADGE[selectedAppt.source].label}
                 </span>
               )}
             </div>
+            {employees.length > 0 && (
+              <div className="mb-4">
+                <label className="text-xs text-gray-400 uppercase font-medium">{t('detail.employeeLabel')}</label>
+                <select
+                  value={selectedAppt.employees?.id ?? ''}
+                  onChange={(e) => assignEmployee(selectedAppt.id, e.target.value)}
+                  className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Unassigned</option>
+                  {employees.map((emp) => (
+                    <option key={emp.id} value={emp.id}>{emp.name}</option>
+                  ))}
+                </select>
+                {assignError && (
+                  <p className="mt-1 text-xs text-red-600">{assignError}</p>
+                )}
+              </div>
+            )}
             {selectedAppt.notes && <p className="text-sm text-gray-600 mb-4 italic">{'"'}{selectedAppt.notes}{'"'}</p>}
             <div className="mb-4">
               <div className="text-xs text-gray-400 mb-2 uppercase font-medium">{t('detail.statusLabel')}</div>
@@ -665,7 +837,7 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                 Delete appointment
               </Button>
             )}
-            <Button variant="outline" className="w-full" onClick={() => { setSelectedAppt(null); setConfirmDelete(false) }}>{t('detail.close')}</Button>
+            <Button variant="outline" className="w-full" onClick={() => { setSelectedAppt(null); setConfirmDelete(false); setAssignError(null) }}>{t('detail.close')}</Button>
           </div>
         </div>
       )}
