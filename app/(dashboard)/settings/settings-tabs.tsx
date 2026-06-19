@@ -785,12 +785,12 @@ export function SettingsTabs({ business: initial, services: initServices, employ
                 <li>Open your new bot in Telegram from your business account and send <code className="bg-gray-100 px-1 rounded">/start</code> — this registers the chat to receive notifications</li>
               </ol>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 min-w-0">
                 <input type="text" value={biz.telegram_bot_token ?? ''}
                   onChange={(e) => setBiz((b) => ({ ...b, telegram_bot_token: e.target.value }))}
                   placeholder={t('notifications.telegram.placeholder')}
-                  className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <Button onClick={connectTelegram} disabled={webhookStatus === 'loading' || !biz.telegram_bot_token} variant="outline">
+                  className="min-w-0 flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <Button onClick={connectTelegram} disabled={webhookStatus === 'loading' || !biz.telegram_bot_token} variant="outline" className="shrink-0">
                   {webhookStatus === 'loading'
                     ? <Loader2 className="w-4 h-4 animate-spin" />
                     : t('notifications.telegram.connectButton')}
@@ -836,12 +836,12 @@ export function SettingsTabs({ business: initial, services: initServices, employ
                 <li>Find your bot in Viber and start a conversation — you will receive a welcome message</li>
               </ol>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 min-w-0">
                 <input type="text" value={biz.viber_bot_token ?? ''}
                   onChange={(e) => setBiz((b) => ({ ...b, viber_bot_token: e.target.value }))}
                   placeholder={t('notifications.viber.placeholder')}
-                  className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <Button onClick={connectViber} disabled={viberWebhookStatus === 'loading' || !biz.viber_bot_token} variant="outline">
+                  className="min-w-0 flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <Button onClick={connectViber} disabled={viberWebhookStatus === 'loading' || !biz.viber_bot_token} variant="outline" className="shrink-0">
                   {viberWebhookStatus === 'loading'
                     ? <Loader2 className="w-4 h-4 animate-spin" />
                     : t('notifications.viber.connectButton')}
