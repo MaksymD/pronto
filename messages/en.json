@@ -645,6 +645,19 @@
     "successMessage": "🎉 Subscription activated! Thank you for upgrading.",
     "errorMessage": "Something went wrong. Please try again or contact support."
   },
+  "onboardingChecklist": {
+    "dismissAria": "Dismiss checklist",
+    "allDone": "You're all set! 🎉",
+    "heading": "Get started with Pronto",
+    "progress": "{count} of 5 complete",
+    "items": {
+      "profile": { "label": "Business profile created" },
+      "service": { "label": "Add your first service", "action": "Add service" },
+      "client": { "label": "Add your first client", "action": "Add client" },
+      "booking": { "label": "Create your first booking", "action": "Open calendar" },
+      "notifications": { "label": "Connect notifications", "description": "Send automatic reminders to clients", "action": "Connect" }
+    }
+  },
   "newClient": {
     "title": "New client",
     "backToClients": "← Clients",

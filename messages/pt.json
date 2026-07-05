@@ -665,6 +665,19 @@
     "successMessage": "🎉 Assinatura ativada! Obrigado por fazer o upgrade.",
     "errorMessage": "Algo deu errado. Por favor tente novamente ou entre em contato com o suporte."
   },
+  "onboardingChecklist": {
+    "dismissAria": "Descartar lista de verificação",
+    "allDone": "Tudo pronto! 🎉",
+    "heading": "Comece a usar o Pronto",
+    "progress": "{count} de 5 concluídos",
+    "items": {
+      "profile": { "label": "Perfil da empresa criado" },
+      "service": { "label": "Adicione o seu primeiro serviço", "action": "Adicionar serviço" },
+      "client": { "label": "Adicione o seu primeiro cliente", "action": "Adicionar cliente" },
+      "booking": { "label": "Crie a sua primeira reserva", "action": "Abrir calendário" },
+      "notifications": { "label": "Conecte as notificações", "description": "Envie lembretes automáticos para os clientes", "action": "Conectar" }
+    }
+  },
   "newClient": {
     "title": "Novo cliente",
     "backToClients": "← Clientes",

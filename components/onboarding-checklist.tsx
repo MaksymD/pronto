@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 const DISMISSED_KEY = 'pronto_onboarding_dismissed'
 const COMPLETE_KEY = 'pronto_onboarding_complete'
@@ -20,6 +21,7 @@ interface Steps {
 }
 
 export function OnboardingChecklist({ businessId }: Props) {
+  const t = useTranslations('onboardingChecklist')
   const [visible, setVisible] = useState(false)
   const [allDone, setAllDone] = useState(false)
   const [steps, setSteps] = useState<Steps>({
@@ -32,8 +34,8 @@ export function OnboardingChecklist({ businessId }: Props) {
 
   useEffect(() => {
     if (
-      localStorage.getItem(DISMISSED_KEY) === 'true' ||
-      localStorage.getItem(COMPLETE_KEY) === 'true'
+        localStorage.getItem(DISMISSED_KEY) === 'true' ||
+        localStorage.getItem(COMPLETE_KEY) === 'true'
     ) {
       return
     }
@@ -45,10 +47,10 @@ export function OnboardingChecklist({ businessId }: Props) {
       supabase.from('clients').select('id', { count: 'exact', head: true }).eq('business_id', businessId),
       supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId),
       supabase
-        .from('businesses')
-        .select('telegram_bot_token, viber_bot_token, owner_whatsapp, smtp_host')
-        .eq('id', businessId)
-        .maybeSingle(),
+          .from('businesses')
+          .select('telegram_bot_token, viber_bot_token, owner_whatsapp, smtp_host')
+          .eq('id', businessId)
+          .maybeSingle(),
     ]).then(([svc, cli, appt, bizResult]) => {
       const b = bizResult.data
       const newSteps: Steps = {
@@ -57,10 +59,10 @@ export function OnboardingChecklist({ businessId }: Props) {
         hasClient: (cli.count ?? 0) > 0,
         hasBooking: (appt.count ?? 0) > 0,
         hasNotification: !!(
-          b?.telegram_bot_token ||
-          b?.owner_whatsapp ||
-          b?.viber_bot_token ||
-          (b?.smtp_host && b.smtp_host.trim() !== '')
+            b?.telegram_bot_token ||
+            b?.owner_whatsapp ||
+            b?.viber_bot_token ||
+            (b?.smtp_host && b.smtp_host.trim() !== '')
         ),
       }
       setSteps(newSteps)
@@ -97,102 +99,102 @@ export function OnboardingChecklist({ businessId }: Props) {
   }> = [
     {
       key: 'profile',
-      label: 'Business profile created',
+      label: t('items.profile.label'),
       done: steps.profileCreated,
       description: null,
       action: null,
     },
     {
       key: 'service',
-      label: 'Add your first service',
+      label: t('items.service.label'),
       done: steps.hasService,
       description: null,
-      action: { label: 'Add service', href: '/settings?tab=services' },
+      action: { label: t('items.service.action'), href: '/settings?tab=services' },
     },
     {
       key: 'client',
-      label: 'Add your first client',
+      label: t('items.client.label'),
       done: steps.hasClient,
       description: null,
-      action: { label: 'Add client', href: '/crm/new' },
+      action: { label: t('items.client.action'), href: '/crm/new' },
     },
     {
       key: 'booking',
-      label: 'Create your first booking',
+      label: t('items.booking.label'),
       done: steps.hasBooking,
       description: null,
-      action: { label: 'Open calendar', href: '/booking' },
+      action: { label: t('items.booking.action'), href: '/booking' },
     },
     {
       key: 'notifications',
-      label: 'Connect notifications',
+      label: t('items.notifications.label'),
       done: steps.hasNotification,
-      description: 'Send automatic reminders to clients',
-      action: { label: 'Connect', href: '/settings?tab=notifications' },
+      description: t('items.notifications.description'),
+      action: { label: t('items.notifications.action'), href: '/settings?tab=notifications' },
     },
   ]
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 relative">
-      <button
-        onClick={dismiss}
-        className="absolute top-3 right-4 text-gray-400 hover:text-gray-600 text-xl leading-none"
-        aria-label="Dismiss checklist"
-      >
-        ×
-      </button>
+      <div className="bg-white border border-gray-200 rounded-xl p-5 relative">
+        <button
+            onClick={dismiss}
+            className="absolute top-3 right-4 text-gray-400 hover:text-gray-600 text-xl leading-none"
+            aria-label={t('dismissAria')}
+        >
+          ×
+        </button>
 
-      {allDone ? (
-        <div className="py-2 text-center">
-          <p className="text-lg font-semibold text-gray-900">{"You're all set! 🎉"}</p>
-        </div>
-      ) : (
-        <>
-          <h3 className="font-semibold text-gray-900 text-base pr-8">Get started with Pronto</h3>
-          <p className="text-sm text-gray-500 mt-0.5">{completeCount} of 5 complete</p>
+        {allDone ? (
+            <div className="py-2 text-center">
+              <p className="text-lg font-semibold text-gray-900">{t('allDone')}</p>
+            </div>
+        ) : (
+            <>
+              <h3 className="font-semibold text-gray-900 text-base pr-8">{t('heading')}</h3>
+              <p className="text-sm text-gray-500 mt-0.5">{t('progress', { count: completeCount })}</p>
 
-          <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${(completeCount / 5) * 100}%`, background: '#16a34a' }}
-            />
-          </div>
+              <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{ width: `${(completeCount / 5) * 100}%`, background: '#16a34a' }}
+                />
+              </div>
 
-          <ul className="mt-4 space-y-3">
-            {items.map((item) => (
-              <li key={item.key} className="flex items-start gap-3">
-                {item.done ? (
-                  <span className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center shrink-0 mt-0.5">
+              <ul className="mt-4 space-y-3">
+                {items.map((item) => (
+                    <li key={item.key} className="flex items-start gap-3">
+                      {item.done ? (
+                          <span className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center shrink-0 mt-0.5">
                     <svg className="w-3 h-3 text-green-600" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                       <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
-                ) : (
-                  <span className="w-5 h-5 rounded-full border-2 border-gray-300 shrink-0 mt-0.5" />
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-3">
+                      ) : (
+                          <span className="w-5 h-5 rounded-full border-2 border-gray-300 shrink-0 mt-0.5" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-3">
                     <span className={`text-sm text-gray-900 ${item.done ? 'opacity-50' : 'font-semibold'}`}>
                       {item.label}
                     </span>
-                    {!item.done && item.action && (
-                      <Link
-                        href={item.action.href}
-                        className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-green-600 text-green-700 font-medium hover:bg-green-50 transition-colors"
-                      >
-                        {item.action.label}
-                      </Link>
-                    )}
-                  </div>
-                  {!item.done && item.description && (
-                    <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-    </div>
+                          {!item.done && item.action && (
+                              <Link
+                                  href={item.action.href}
+                                  className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-green-600 text-green-700 font-medium hover:bg-green-50 transition-colors"
+                              >
+                                {item.action.label}
+                              </Link>
+                          )}
+                        </div>
+                        {!item.done && item.description && (
+                            <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
+                        )}
+                      </div>
+                    </li>
+                ))}
+              </ul>
+            </>
+        )}
+      </div>
   )
 }

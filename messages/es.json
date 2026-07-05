@@ -665,6 +665,19 @@
     "successMessage": "🎉 ¡Suscripción activada! Gracias por mejorar tu plan.",
     "errorMessage": "Algo salió mal. Por favor intenta de nuevo o contacta soporte."
   },
+  "onboardingChecklist": {
+    "dismissAria": "Ocultar lista de verificación",
+    "allDone": "¡Todo listo! 🎉",
+    "heading": "Comienza a usar Pronto",
+    "progress": "{count} de 5 completados",
+    "items": {
+      "profile": { "label": "Perfil de la empresa creado" },
+      "service": { "label": "Añade tu primer servicio", "action": "Añadir servicio" },
+      "client": { "label": "Añade tu primer cliente", "action": "Añadir cliente" },
+      "booking": { "label": "Crea tu primera reserva", "action": "Abrir calendario" },
+      "notifications": { "label": "Conecta las notificaciones", "description": "Envía recordatorios automáticos a tus clientes", "action": "Conectar" }
+    }
+  },
   "newClient": {
     "title": "Nuevo cliente",
     "backToClients": "← Clientes",

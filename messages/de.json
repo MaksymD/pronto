@@ -16,7 +16,7 @@
   "landing": {
     "badge": "Open Source · MIT-Lizenz · Docker mit einem Befehl",
     "headline": "Geschäftsverwaltung für Dienstleistungsbetriebe",
-    "subheadline": "Kasse · CRM · Buchung · Omnichannel-Benachrichtigungen.",
+    "subheadline": "Kasse · CRM · Lager · Buchung · Omnichannel-Benachrichtigungen.",
     "pitch": "Ihre Daten, Ihr Server. Keine Provision.",
     "ctaPrimary": "Kostenlos starten",
     "ctaGithub": "Auf GitHub ansehen",
@@ -24,6 +24,7 @@
     "features": {
       "pos": "Kasse — Verkauf in 3 Klicks abschließen",
       "crm": "CRM — vollständige Kundenhistorie in 1 Sekunde",
+      "inventory": "Lagerverwaltung mit Beständen und Benachrichtigungen bei Knappheit",
       "booking": "Kalender + Online-Buchung ohne Registrierung",
       "notifications": "Telegram- & Viber-Benachrichtigungen (kostenlos)",
       "hosting": "Multi-Tenant-SaaS oder selbst gehostet via Docker"
@@ -141,7 +142,9 @@
     "stats": {
       "revenueToday": "Umsatz heute",
       "appointmentsToday": "Termine heute",
-      "totalClients": "Kunden insgesamt"
+      "totalClients": "Kunden insgesamt",
+      "lowStock": "Knappe Artikel",
+      "lowStockOk": "Alles im grünen Bereich ✓"
     },
     "upcomingAppointments": {
       "heading": "Anstehende Termine",
@@ -210,6 +213,29 @@
       "visits": "Besuche",
       "spent": "Ausgegeben",
       "lastVisit": "Letzter Besuch"
+    }
+  },
+  "inventory": {
+    "title": "Lager",
+    "addItem": "Artikel hinzufügen",
+    "lowStockAlert": "{count} Artikel unter dem Mindestbestand",
+    "lowStockAlertPlural": "{count} Artikel unter dem Mindestbestand",
+    "empty": {
+      "icon": "📦",
+      "heading": "Noch keine Artikel im Lager",
+      "action": "Ersten Artikel hinzufügen"
+    },
+    "table": {
+      "name": "Name",
+      "category": "Kategorie",
+      "stock": "Bestand",
+      "cost": "Selbstkosten",
+      "sellPrice": "Verkaufspreis",
+      "status": "Status"
+    },
+    "status": {
+      "lowStock": "Knapp",
+      "ok": "Normal"
     }
   },
   "booking": {
@@ -436,7 +462,8 @@
         "reminder1h": "Erinnerung — 1 Stunde vorher",
         "thankYou": "Dankeschön — nach dem Besuch",
         "reactivation": "Reaktivierung — 30 Tage ohne Besuch",
-        "birthday": "Geburtstagsgruß"
+        "birthday": "Geburtstagsgruß",
+        "lowStock": "Benachrichtigung bei Lagerknappheit (E-Mail)"
       }
     }
   },
@@ -444,6 +471,7 @@
     "dashboard": "Dashboard",
     "pos": "Kasse",
     "clients": "Kunden",
+    "inventory": "Lager",
     "booking": "Buchung",
     "settings": "Einstellungen",
     "signOut": "Abmelden"
@@ -559,6 +587,49 @@
     "itemCountPlural": "{count} Artikel",
     "moreItems": "+ {count} weitere"
   },
+  "inventoryDetail": {
+    "backToInventory": "← Lager",
+    "editButton": "Bearbeiten",
+    "saveButton": "Speichern",
+    "cancelButton": "Abbrechen",
+    "deleteButton": "Artikel löschen",
+    "deleteConfirm": "Diesen Artikel aus dem Lager löschen?",
+    "fields": {
+      "name": "Name",
+      "sku": "Artikelnummer (SKU)",
+      "category": "Kategorie",
+      "unit": "Maßeinheit",
+      "costPrice": "Selbstkosten",
+      "sellPrice": "Verkaufspreis",
+      "lowStockThreshold": "Benachrichtigen bei Bestand unter"
+    },
+    "stock": {
+      "current": "Aktueller Bestand",
+      "addMovement": "Bestandsänderung hinzufügen",
+      "type": "Typ",
+      "typeIn": "Wareneingang (+)",
+      "typeOut": "Warenausgang / Verbrauch (−)",
+      "typeAdjustment": "Korrektur",
+      "quantity": "Menge",
+      "note": "Notiz",
+      "notePlaceholder": "z. B. Lieferung vom Lieferanten, für Dienstleistung verwendet…",
+      "save": "Speichern",
+      "saving": "Wird gespeichert…"
+    },
+    "movements": {
+      "heading": "Historie der Bestandsbewegungen",
+      "empty": "Noch keine Bestandsbewegungen vorhanden",
+      "table": {
+        "date": "Datum",
+        "type": "Typ",
+        "quantity": "Menge",
+        "note": "Notiz"
+      },
+      "typeIn": "Zug.",
+      "typeOut": "Abg.",
+      "typeAdjustment": "Korr."
+    }
+  },
   "billing": {
     "heading": "Ihr Tarif",
     "planSuffix": "Tarif",
@@ -573,6 +644,19 @@
     "currentPlan": "Aktueller Tarif",
     "successMessage": "🎉 Abonnement aktiviert! Danke für das Upgrade.",
     "errorMessage": "Etwas ist schiefgelaufen. Bitte erneut versuchen oder den Support kontaktieren."
+  },
+  "onboardingChecklist": {
+    "dismissAria": "Checkliste ausblenden",
+    "allDone": "Alles fertig! 🎉",
+    "heading": "Erste Schritte mit Pronto",
+    "progress": "{count} von 5 erledigt",
+    "items": {
+      "profile": { "label": "Unternehmensprofil erstellt" },
+      "service": { "label": "Fügen Sie Ihre erste Dienstleistung hinzu", "action": "Dienstleistung hinzufügen" },
+      "client": { "label": "Fügen Sie Ihren ersten Kunden hinzu", "action": "Kunde hinzufügen" },
+      "booking": { "label": "Erstellen Sie Ihren ersten Termin", "action": "Kalender öffnen" },
+      "notifications": { "label": "Benachrichtigungen verbinden", "description": "Automatische Erinnerungen an Kunden senden", "action": "Verbinden" }
+    }
   },
   "newClient": {
     "title": "Neuer Kunde",
@@ -593,6 +677,26 @@
       "tagsPlaceholder": "Stammkunde, VIP…"
     },
     "submitButton": "Kunde hinzufügen",
+    "cancelButton": "Abbrechen"
+  },
+  "newInventoryItem": {
+    "title": "Neuer Lagerartikel",
+    "backToInventory": "← Lager",
+    "fields": {
+      "name": "Name *",
+      "namePlaceholder": "Shampoo 500ml",
+      "sku": "Artikelnummer (SKU)",
+      "skuPlaceholder": "SKU-001",
+      "category": "Kategorie",
+      "categoryPlaceholder": "Haarpflege",
+      "unit": "Maßeinheit",
+      "unitPlaceholder": "Stk.",
+      "quantity": "Anfangsbestand",
+      "costPrice": "Selbstkosten",
+      "sellPrice": "Verkaufspreis",
+      "lowStockThreshold": "Benachrichtigen bei Bestand unter"
+    },
+    "submitButton": "Artikel hinzufügen",
     "cancelButton": "Abbrechen"
   }
 }
