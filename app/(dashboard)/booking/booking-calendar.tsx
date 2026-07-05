@@ -810,20 +810,20 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
             )}
             {confirmDelete ? (
               <div className="rounded-xl border border-red-200 bg-red-50 p-3 mb-2">
-                <p className="text-sm text-red-700 font-medium mb-2">Delete this appointment?</p>
+                <p className="text-sm text-red-700 font-medium mb-2">{t('deleteConfirm')}</p>
                 <div className="flex gap-2">
                   <Button
                     className="flex-1 bg-red-500 hover:bg-red-600 text-white h-8 text-sm"
                     onClick={() => deleteAppointment(selectedAppt.id)}
                   >
-                    Delete
+                    {t('deleteYes')}
                   </Button>
                   <Button
                     variant="outline"
                     className="flex-1 h-8 text-sm"
                     onClick={() => setConfirmDelete(false)}
                   >
-                    Cancel
+                    {t('deleteNo')}
                   </Button>
                 </div>
               </div>
@@ -833,7 +833,7 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                 className="w-full mb-2 text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
                 onClick={() => setConfirmDelete(true)}
               >
-                Delete appointment
+                {t('deleteAppointment')}
               </Button>
             )}
             <Button variant="outline" className="w-full" onClick={() => { setSelectedAppt(null); setConfirmDelete(false); setAssignError(null) }}>{t('detail.close')}</Button>

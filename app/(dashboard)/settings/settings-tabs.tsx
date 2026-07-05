@@ -930,37 +930,38 @@ export function SettingsTabs({ business: initial, services: initServices, employ
                 <Zap className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <div className="text-base font-semibold text-gray-900">Self-hosted Plan</div>
-                <div className="text-sm text-gray-500">You own this installation. No limits, no subscriptions, free forever.</div>
+                <div className="text-base font-semibold text-gray-900">{t('payment.selfHostedTitle')}</div>
+                <div className="text-sm text-gray-500">{t('payment.selfHostedDescription')}</div>
               </div>
-              <Badge variant="success" className="ml-auto">Active</Badge>
+              <Badge variant="success" className="ml-auto">{t('payment.activeStatus')}</Badge>
             </div>
             <div className="space-y-2 mt-2">
               {[
-                'Unlimited employees',
-                'Unlimited clients',
-                'All features included',
+                'unlimitedEmployees',
+                'unlimitedClients',
+                'allFeatures',
               ].map((item) => (
                 <div key={item} className="flex items-center gap-2 text-sm text-gray-700">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  {item}
+                  {t(`payment.features.${item}`)}
                 </div>
               ))}
             </div>
           </div>
 
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
-            <div className="font-semibold text-gray-900 mb-1">Prefer a managed version?</div>
+            <div className="font-semibold text-gray-900 mb-1">{t('payment.managedVersionTitle')}</div>
             <p className="text-sm text-gray-500 mb-4">
-              trypronto.app handles hosting and updates for you. Plans from $19/mo.
+              {t('payment.managedVersionDescription')}
             </p>
+            {/* TODO: fix URL */}
             <a
               href="https://trypronto.app"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 border border-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg hover:bg-white hover:border-gray-400 transition-colors"
             >
-              Learn more →
+              {t('payment.managedVersionLink')} →
             </a>
           </div>
         </div>

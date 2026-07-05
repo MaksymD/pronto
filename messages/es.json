@@ -263,6 +263,10 @@
   "booking": {
     "title": "Reservas",
     "newAppointment": "Nueva reserva",
+    "deleteAppointment": "Eliminar marcação",
+    "deleteConfirm": "¿Eliminar esta cita?",
+    "deleteYes": "Sim, eliminar",
+    "deleteNo": "Cancelar",
     "emptyState": {
       "heading": "No hay citas esta semana",
       "sub": "Haz clic en un horario del calendario o usa el botón para agregar una"
@@ -500,6 +504,19 @@
         "birthday": "Felicitación de cumpleaños",
         "lowStock": "Alerta de stock bajo (correo)"
       }
+    },
+    "payment": {
+      "selfHostedTitle": "Plan autoalojado",
+      "selfHostedDescription": "Eres dueño de esta instalación. Sin límites, sin suscripciones, gratis para siempre.",
+      "activeStatus": "Activo",
+      "features": {
+        "unlimitedEmployees": "Empleados ilimitados",
+        "unlimitedClients": "Clientes ilimitados",
+        "allFeatures": "Todas las funciones incluidas"
+      },
+      "managedVersionTitle": "¿Prefieres una versión administrada?",
+      "managedVersionDescription": "trypronto.app se encarga del alojamiento y las actualizaciones por ti. Planes desde $19/mes.",
+      "managedVersionLink": "Saber más"
     }
   },
   "sidebar": {

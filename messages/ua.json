@@ -243,6 +243,10 @@
   "booking": {
     "title": "Бронювання",
     "newAppointment": "Новий запис",
+    "deleteAppointment": "Видалити бронювання",
+    "deleteConfirm": "Ви впевнені, що хочете видалити це бронювання? Цю дію не можна буде скасувати.",
+    "deleteYes": "Так, видалити",
+    "deleteNo": "Скасувати",
     "emptyState": {
       "heading": "Немає записів на цьому тижні",
       "sub": "Натисніть на слот у календарі або скористайтеся кнопкою, щоб додати запис"
@@ -480,6 +484,19 @@
         "birthday": "Вітання з днем народження",
         "lowStock": "Сповіщення про дефіцит на складі (email)"
       }
+    },
+    "payment": {
+      "selfHostedTitle": "Self-hosted тариф",
+      "selfHostedDescription": "Ви є власником. Без лімітів, без підписок, безкоштовно назавжди.",
+      "activeStatus": "Активний",
+      "features": {
+        "unlimitedEmployees": "Безліміт співробітників",
+        "unlimitedClients": "Безліміт клієнтів",
+        "allFeatures": "Усі функції включено"
+      },
+      "managedVersionTitle": "Бажаєте версію з повним керуванням?",
+      "managedVersionDescription": "trypronto.app бере на себе хостинг та оновлення за вас. Тарифи від $19/міс.",
+      "managedVersionLink": "Дізнатися більше"
     }
   },
   "sidebar": {

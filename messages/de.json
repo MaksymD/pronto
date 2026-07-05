@@ -243,6 +243,10 @@
   "booking": {
     "title": "Buchung",
     "newAppointment": "Neuer Termin",
+    "deleteAppointment": "Termin löschen",
+    "deleteConfirm": "Diesen Termin löschen?",
+    "deleteYes": "Ja, löschen",
+    "deleteNo": "Abbrechen",
     "emptyState": {
       "heading": "Keine Termine diese Woche",
       "sub": "Klicken Sie auf einen Zeitslot im Kalender oder nutzen Sie die Schaltfläche, um einen hinzuzufügen"
@@ -480,6 +484,19 @@
         "birthday": "Geburtstagsgruß",
         "lowStock": "Benachrichtigung bei Lagerknappheit (E-Mail)"
       }
+    },
+    "payment": {
+      "selfHostedTitle": "Self-hosted Tarif",
+      "selfHostedDescription": "Sie besitzen diese Installation. Keine Limits, keine Abonnements, für immer kostenlos.",
+      "activeStatus": "Aktiv",
+      "features": {
+        "unlimitedEmployees": "Unbegrenzte Mitarbeiter",
+        "unlimitedClients": "Unbegrenzte Kunden",
+        "allFeatures": "Alle Funktionen inklusive"
+      },
+      "managedVersionTitle": "Bevorzugen Sie eine Managed-Version?",
+      "managedVersionDescription": "trypronto.app übernimmt das Hosting und die Updates für Sie. Tarife ab 19 $/Monat.",
+      "managedVersionLink": "Mehr erfahren"
     }
   },
   "sidebar": {
