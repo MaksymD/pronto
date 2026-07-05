@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Header } from '@/components/layout/header'
 import { BookingCalendar } from './booking-calendar'
+import {getTranslations} from "next-intl/server";
 
 export default async function BookingPage() {
   const supabase = createClient()
@@ -51,9 +52,10 @@ export default async function BookingPage() {
         .eq('business_id', business.id),
     ])
 
+    const t = await getTranslations('booking')
   return (
     <>
-      <Header title="Booking" />
+      <Header title={t('title')} />
       <BookingCalendar
         businessId={business.id}
         slug={business.slug}

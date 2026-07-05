@@ -219,6 +219,7 @@
   "inventory": {
     "title": "Lager",
     "addItem": "Artikel hinzufügen",
+    "searchPlaceholderInventory": "Nach Name oder SKU suchen…",
     "lowStockAlert": "{count} Artikel unter dem Mindestbestand",
     "lowStockAlertPlural": "{count} Artikel unter dem Mindestbestand",
     "empty": {
@@ -290,6 +291,7 @@
     }
   },
   "settings": {
+    "settings": "Einstellungen",
     "tabs": {
       "general": "Allgemein",
       "services": "Dienstleistungen",

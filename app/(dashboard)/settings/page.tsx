@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Header } from '@/components/layout/header'
 import { SettingsTabs } from './settings-tabs'
+import {getTranslations} from "next-intl/server";
 
 export default async function SettingsPage() {
   const supabase = createClient()
@@ -39,9 +40,11 @@ export default async function SettingsPage() {
     process.env.META_WHATSAPP_ACCESS_TOKEN
   )
 
+  const t = await getTranslations('settings')
+
   return (
     <>
-      <Header title="Settings" />
+      <Header title={t('title')} />
       <SettingsTabs
         business={business!}
         services={services ?? []}

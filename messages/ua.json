@@ -219,6 +219,7 @@
   "inventory": {
     "title": "Склад",
     "addItem": "Додати товар",
+    "searchPlaceholderInventory": "Пошук за назвою або SKU…",
     "lowStockAlert": "{count} товар нижче мінімального ліміту залишків",
     "lowStockAlertPlural": "{count} товарів нижче мінімального ліміту залишків",
     "empty": {
@@ -290,6 +291,7 @@
     }
   },
   "settings": {
+    "title": "Налаштування",
     "tabs": {
       "general": "Загальні",
       "services": "Послуги",

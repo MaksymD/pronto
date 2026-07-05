@@ -239,6 +239,7 @@
   "inventory": {
     "title": "Estoque",
     "addItem": "Adicionar item",
+    "searchPlaceholderInventory": "Buscar por nome ou SKU…",
     "lowStockAlert": "{count} item abaixo do mínimo",
     "lowStockAlertPlural": "{count} itens abaixo do mínimo",
     "empty": {
@@ -310,6 +311,7 @@
     }
   },
   "settings": {
+    "settings": "Definições",
     "tabs": {
       "general": "Geral",
       "services": "Serviços",

@@ -219,6 +219,7 @@
   "inventory": {
     "title": "Inventory",
     "addItem": "Add item",
+    "searchPlaceholderInventory": "Search by name or SKU…",
     "lowStockAlert": "{count} item below low-stock threshold",
     "lowStockAlertPlural": "{count} items below low-stock threshold",
     "empty": {
@@ -290,6 +291,7 @@
     }
   },
   "settings": {
+    "settings": "Settings",
     "tabs": {
       "general": "General",
       "services": "Services",
