@@ -123,6 +123,44 @@ export function tplNewBooking(opts: {
     .join('\n')
 }
 
+export function tplCancelled(opts: {
+  clientName: string
+  serviceName: string
+  date: string
+  time: string
+  employeeName?: string
+}): string {
+  return [
+    `❌ Booking cancelled`,
+    ``,
+    `👤 Client: ${opts.clientName}`,
+    `✂️ Service: ${opts.serviceName}`,
+    `🕐 ${opts.date} at ${opts.time}`,
+    opts.employeeName ? `👷 Employee: ${opts.employeeName}` : '',
+  ]
+      .filter(Boolean)
+      .join('\n')
+}
+
+export function tplCancelledClient(opts: {
+  clientName: string
+  serviceName: string
+  date: string
+  time: string
+  businessName: string
+}): string {
+  return [
+    `❌ Запись отменена`,
+    ``,
+    `👤 ${opts.clientName}`,
+    `✂️ ${opts.serviceName}`,
+    `🕐 ${opts.date} в ${opts.time}`,
+    `🏠 ${opts.businessName}`,
+    ``,
+    `Ваша запись отменена. Свяжитесь с нами, если хотите записаться снова.`,
+  ].join('\n')
+}
+
 export function tplReminder(opts: {
   clientName: string
   serviceName: string

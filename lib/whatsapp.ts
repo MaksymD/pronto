@@ -83,6 +83,26 @@ export function tplBookingConfirmation(opts: {
   return lines.join('\n')
 }
 
+export function tplBookingCancellation(opts: {
+  clientName: string
+  serviceName: string
+  date: string
+  time: string
+  businessName: string
+}): string {
+  return [
+    `❌ Booking cancelled`,
+    ``,
+    `Hi ${opts.clientName},`,
+    `Your appointment has been cancelled:`,
+    ``,
+    `Service: ${opts.serviceName}`,
+    `Date: ${opts.date} at ${opts.time}`,
+    ``,
+    `Contact us if you'd like to rebook — ${opts.businessName}`,
+  ].join('\n')
+}
+
 export function tplReminder(opts: {
   clientName: string
   serviceName: string

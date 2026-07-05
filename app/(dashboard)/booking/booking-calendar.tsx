@@ -397,10 +397,25 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
     await supabase.from('appointments').update({ status }).eq('id', id)
     setAppointments((prev) => prev.map((a) => a.id === id ? { ...a, status } : a))
     setSelectedAppt((a) => a?.id === id ? { ...a, status } : a)
+    if (status === 'cancelled') {
+      fetch('/api/email/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ appointmentId: id }),
+      }).catch(() => {/* non-critical */})
+    }
     router.refresh()
   }
 
   async function deleteAppointment(id: string) {
+    // Send cancellation notifications BEFORE deleting — the notify endpoint
+    // needs the appointment/client/business data that a delete would remove.
+    await fetch('/api/email/cancel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ appointmentId: id }),
+    }).catch(() => {/* non-critical — proceed with deletion regardless */})
+
     await supabase.from('appointments').delete().eq('id', id)
     setAppointments((prev) => prev.filter((a) => a.id !== id))
     setSelectedAppt(null)

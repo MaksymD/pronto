@@ -156,6 +156,44 @@ export function tplBirthday(opts: {
   ].join('\n')
 }
 
+export function tplCancelled(opts: {
+  clientName: string
+  serviceName: string
+  date: string
+  time: string
+  employeeName?: string
+}): string {
+  return [
+    `❌ <b>Booking cancelled</b>`,
+    ``,
+    `👤 Client: ${opts.clientName}`,
+    `✂️ Service: ${opts.serviceName}`,
+    `🕐 ${opts.date} at ${opts.time}`,
+    opts.employeeName ? `👷 Employee: ${opts.employeeName}` : '',
+  ]
+      .filter(Boolean)
+      .join('\n')
+}
+
+export function tplCancelledClient(opts: {
+  clientName: string
+  serviceName: string
+  date: string
+  time: string
+  businessName: string
+}): string {
+  return [
+    `❌ <b>Booking cancelled</b>`,
+    ``,
+    `👤 ${opts.clientName}`,
+    `✂️ ${opts.serviceName}`,
+    `🕐 ${opts.date} at ${opts.time}`,
+    `🏠 ${opts.businessName}`,
+    ``,
+    `Your appointment has been cancelled. Contact us if you'd like to rebook.`,
+  ].join('\n')
+}
+
 // ─── Шаблоны для клиентов ─────────────────────────────────────────────────────
 
 export function tplReminderClient(opts: {

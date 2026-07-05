@@ -108,6 +108,35 @@ export async function sendBookingConfirmation(opts: {
   })
 }
 
+// ─── Cancellation ─────────────────────────────────────────────────────────────────
+export async function sendBookingCancellation(opts: {
+  to: string
+  clientName: string
+  businessName: string
+  serviceName: string
+  date: string
+  time: string
+  employeeName?: string
+}) {
+  const body = `
+    ${h1('Booking cancelled')}
+    ${p(`Hi ${firstName(opts.clientName)}, your appointment has been cancelled.`)}
+    ${info([
+    ['Service', opts.serviceName],
+    ['Date', opts.date],
+    ['Time', opts.time],
+    ...(opts.employeeName ? [['Employee', opts.employeeName] as [string, string]] : []),
+  ])}
+    ${p(`Contact us if you'd like to rebook — ${opts.businessName}`)}
+  `
+  return sendMail({
+    from: getFromAddress(opts.businessName),
+    to: opts.to,
+    subject: `Booking cancelled — ${opts.serviceName} at ${opts.time}`,
+    html: layout(opts.businessName, body),
+  })
+}
+
 // ─── Reminder ─────────────────────────────────────────────────────────────────
 
 export async function sendReminder(opts: {
