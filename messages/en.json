@@ -387,8 +387,13 @@
         "email": "Email",
         "address": "Address",
         "timezone": "Timezone",
+        "timeFormat": "Time Format",
         "currency": "Currency (ISO)",
         "slug": "URL slug"
+      },
+      "timeFormatOptions": {
+        "24h": "24h",
+        "12h": "12h"
       },
       "typeLabel": "Business type",
       "typeDefault": "— select —",

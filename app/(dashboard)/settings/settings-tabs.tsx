@@ -10,7 +10,7 @@ import { useTranslations } from 'next-intl'
 
 interface Business {
   id: string; name: string; slug: string; type: string | null; phone: string | null
-  email: string | null; address: string | null; timezone: string; currency: string; plan: string
+  email: string | null; address: string | null; timezone: string; time_format: string | null; currency: string; plan: string
   plan_expires_at: string | null
   telegram_bot_token: string | null; viber_bot_token: string | null
   owner_whatsapp: string | null
@@ -148,7 +148,7 @@ export function SettingsTabs({ business: initial, services: initServices, employ
     setBiz((b) => ({ ...b, slug: cleanSlug }))
     await supabase.from('businesses').update({
       name: biz.name, slug: cleanSlug, type: biz.type, phone: biz.phone, email: biz.email, address: biz.address,
-      timezone: biz.timezone, currency: biz.currency,
+      timezone: biz.timezone, time_format: biz.time_format || '24h', currency: biz.currency,
       telegram_bot_token: biz.telegram_bot_token, viber_bot_token: biz.viber_bot_token,
       owner_whatsapp: biz.owner_whatsapp,
       email_provider: biz.email_provider,
@@ -356,51 +356,60 @@ export function SettingsTabs({ business: initial, services: initServices, employ
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <h2 className="font-semibold text-gray-900 mb-4">{t('general.heading')}</h2>
           <div className="grid sm:grid-cols-2 gap-4">
-            {generalFields.map(({ key, label, type }) => (
-              <div key={key}>
-                <label className="text-xs font-medium text-gray-500">{label}</label>
-                <input type={type} value={(biz[key] as string) ?? ''}
-                  onChange={(e) => setBiz((b) => ({ ...b, [key]: e.target.value }))}
-                  className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              </div>
+            {generalFields.map(({key, label, type}) => (
+                <div key={key}>
+                  <label className="text-xs font-medium text-gray-500">{label}</label>
+                  <input type={type} value={(biz[key] as string) ?? ''}
+                         onChange={(e) => setBiz((b) => ({...b, [key]: e.target.value}))}
+                         className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
             ))}
             <div>
               <label className="text-xs font-medium text-gray-500">{t('general.fields.timezone')}</label>
-              <select value={biz.timezone ?? 'UTC'} onChange={(e) => setBiz((b) => ({ ...b, timezone: e.target.value }))}
-                className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select value={biz.timezone ?? 'UTC'} onChange={(e) => setBiz((b) => ({...b, timezone: e.target.value}))}
+                      className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 {TIMEZONES.map((tz) => (
-                  <option key={tz.value} value={tz.value}>{tz.label}</option>
+                    <option key={tz.value} value={tz.value}>{tz.label}</option>
                 ))}
+              </select>
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-500">{t('general.fields.timeFormat')}</label>
+              <select value={biz.time_format ?? '24h'}
+                      onChange={(e) => setBiz((b) => ({...b, time_format: e.target.value}))}
+                      className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="24h">{t('general.timeFormatOptions.24h')}</option>
+                <option value="12h">{t('general.timeFormatOptions.12h')}</option>
               </select>
             </div>
             <div>
               <label className="text-xs font-medium text-gray-500">{t('general.fields.currency')}</label>
               <select value={currencySelectValue}
-                onChange={(e) => {
-                  if (e.target.value !== 'other') setBiz((b) => ({ ...b, currency: e.target.value }))
-                  else setBiz((b) => ({ ...b, currency: '' }))
-                }}
-                className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      onChange={(e) => {
+                        if (e.target.value !== 'other') setBiz((b) => ({...b, currency: e.target.value}))
+                        else setBiz((b) => ({...b, currency: ''}))
+                      }}
+                      className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 {CURRENCIES.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
+                    <option key={c.value} value={c.value}>{c.label}</option>
                 ))}
               </select>
               {currencySelectValue === 'other' && (
-                <input
-                  type="text"
-                  value={biz.currency ?? ''}
-                  onChange={(e) => setBiz((b) => ({ ...b, currency: e.target.value.toUpperCase() }))}
-                  placeholder="e.g. SGD"
-                  maxLength={10}
-                  className="w-full mt-2 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                  <input
+                      type="text"
+                      value={biz.currency ?? ''}
+                      onChange={(e) => setBiz((b) => ({...b, currency: e.target.value.toUpperCase()}))}
+                      placeholder="e.g. SGD"
+                      maxLength={10}
+                      className="w-full mt-2 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
               )}
             </div>
           </div>
           <div className="pt-2">
             <label className="text-xs font-medium text-gray-500">{t('general.typeLabel')}</label>
-            <select value={biz.type ?? ''} onChange={(e) => setBiz((b) => ({ ...b, type: e.target.value }))}
-              className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <select value={biz.type ?? ''} onChange={(e) => setBiz((b) => ({...b, type: e.target.value}))}
+                    className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="">{t('general.typeDefault')}</option>
               {(['salon', 'barbershop', 'auto_repair', 'cafe', 'dental', 'fitness', 'massage', 'other'] as const).map((tp) => (
                 <option key={tp} value={tp}>{t(`general.types.${tp}`)}</option>

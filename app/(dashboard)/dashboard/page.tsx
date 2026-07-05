@@ -24,7 +24,7 @@ export default async function DashboardPage() {
 
   const { data: business } = await supabase
     .from('businesses')
-    .select('id, name, currency, timezone, onboarding_completed')
+    .select('id, name, currency, timezone, time_format, onboarding_completed')
     .eq('owner_id', user!.id)
     .maybeSingle()
 

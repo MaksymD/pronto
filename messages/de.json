@@ -351,8 +351,13 @@
         "email": "E-Mail",
         "address": "Adresse",
         "timezone": "Zeitzone",
+        "timeFormat": "Zeitformat",
         "currency": "Währung (ISO)",
         "slug": "URL-Kennung"
+      },
+      "timeFormatOptions": {
+        "24 Std.": "24 Std.",
+        "12 Std.": "12 Std."
       },
       "typeLabel": "Art des Unternehmens",
       "typeDefault": "— auswählen —",

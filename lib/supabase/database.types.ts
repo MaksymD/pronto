@@ -20,6 +20,7 @@ export type Database = {
           email: string | null
           address: string | null
           timezone: string
+          time_format: string
           currency: string
           logo_url: string | null
           plan: string
@@ -56,6 +57,7 @@ export type Database = {
           email?: string | null
           address?: string | null
           timezone?: string
+          time_format?: string
           currency?: string
           logo_url?: string | null
           plan?: string
@@ -92,6 +94,7 @@ export type Database = {
           email?: string | null
           address?: string | null
           timezone?: string
+          time_format?: string
           currency?: string
           logo_url?: string | null
           plan?: string

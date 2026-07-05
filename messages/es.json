@@ -371,8 +371,13 @@
         "email": "Correo electrónico",
         "address": "Dirección",
         "timezone": "Zona horaria",
+        "timeFormat": "Formato de hora",
         "currency": "Moneda (ISO)",
         "slug": "Slug de URL"
+      },
+      "timeFormatOptions": {
+        "24h": "24 h",
+        "12h": "12 h"
       },
       "typeLabel": "Tipo de negocio",
       "typeDefault": "— seleccionar —",

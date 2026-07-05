@@ -351,8 +351,13 @@
         "email": "Email",
         "address": "Адреса",
         "timezone": "Часовий пояс",
+        "timeFormat": "Формат часу",
         "currency": "Валюта (ISO)",
         "slug": "URL-ідентифікатор"
+      },
+      "timeFormatOptions": {
+        "24h": "24 год",
+        "12h": "12 год"
       },
       "typeLabel": "Тип бізнесу",
       "typeDefault": "— оберіть —",

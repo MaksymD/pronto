@@ -9,7 +9,7 @@ export default async function BookingPage() {
 
   const { data: business } = await supabase
     .from('businesses')
-    .select('id, slug, timezone')
+    .select('id, slug, timezone, time_format')
     .eq('owner_id', user!.id)
     .maybeSingle()
 
@@ -60,6 +60,7 @@ export default async function BookingPage() {
         businessId={business.id}
         slug={business.slug}
         timezone={business.timezone}
+        timeFormat={business.time_format ?? '24h'}
         appointments={appointments ?? []}
         employees={employees ?? []}
         services={services ?? []}
