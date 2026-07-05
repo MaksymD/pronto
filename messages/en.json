@@ -362,6 +362,8 @@
         "massage": "💆 Massage / Spa",
         "other": "🏢 Other"
       },
+      "brandColorLabel": "Brand color",
+      "brandColorDescription": "Used on your public booking page.",
       "bookingUrlLabel": "Public booking URL",
       "slugHint": "Only lowercase letters, numbers and hyphens. Changing this will break existing booking links.",
       "slugError": "Only lowercase letters, numbers, and hyphens allowed",
@@ -376,7 +378,8 @@
         "name": "Name",
         "category": "Category",
         "price": "Price",
-        "duration": "Duration"
+        "duration": "Duration",
+        "capacity": "Capacity"
       },
       "addHeading": "Add service",
       "editHeading": "Edit service",
@@ -384,7 +387,9 @@
         "name": "Name",
         "category": "Category",
         "price": "Price",
-        "duration": "Duration (min)"
+        "duration": "Duration (min)",
+        "capacity": "Capacity",
+        "capacityDescription": "Max clients per slot (1 = individual, >1 = group class)"
       },
       "addButton": "Add service",
       "updateButton": "Update",

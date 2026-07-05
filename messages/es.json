@@ -382,6 +382,8 @@
         "massage": "💆 Masajes / Spa",
         "other": "🏢 Otro"
       },
+      "brandColorLabel": "Color de la marca",
+      "brandColorDescription": "Se utiliza en tu página pública de reservas.",
       "bookingUrlLabel": "URL pública de reservas",
       "slugHint": "Solo letras minúsculas, números y guiones. Cambiar esto romperá los enlaces de reserva existentes.",
       "slugError": "Solo se permiten letras minúsculas, números y guiones",
@@ -396,7 +398,8 @@
         "name": "Nombre",
         "category": "Categoría",
         "price": "Precio",
-        "duration": "Duración"
+        "duration": "Duración",
+        "capacity": "Capacidad"
       },
       "addHeading": "Agregar servicio",
       "editHeading": "Editar servicio",
@@ -404,7 +407,9 @@
         "name": "Nombre",
         "category": "Categoría",
         "price": "Precio",
-        "duration": "Duración (min)"
+        "duration": "Duración (min)",
+        "capacity": "Capacidad",
+        "capacityDescription": "Máx. de clientes por turno (1 = individual, >1 = clase grupal)"
       },
       "addButton": "Agregar servicio",
       "updateButton": "Actualizar",

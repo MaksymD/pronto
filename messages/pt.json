@@ -382,6 +382,8 @@
         "massage": "💆 Massagem / Spa",
         "other": "🏢 Outro"
       },
+      "brandColorLabel": "Cor da marca",
+      "brandColorDescription": "Utilizada na sua página pública de reservas.",
       "bookingUrlLabel": "URL pública de agendamentos",
       "slugHint": "Apenas letras minúsculas, números e hífens. Alterar isso quebrará os links de agendamento existentes.",
       "slugError": "Apenas letras minúsculas, números e hífens são permitidos",
@@ -396,7 +398,8 @@
         "name": "Nome",
         "category": "Categoria",
         "price": "Preço",
-        "duration": "Duração"
+        "duration": "Duração",
+        "capacity": "Capacidade"
       },
       "addHeading": "Adicionar serviço",
       "editHeading": "Editar serviço",
@@ -404,7 +407,9 @@
         "name": "Nome",
         "category": "Categoria",
         "price": "Preço",
-        "duration": "Duração (min)"
+        "duration": "Duração (min)",
+        "capacity": "Capacidade",
+        "capacityDescription": "Máx. de clientes por vaga (1 = individual, >1 = aula em grupo)"
       },
       "addButton": "Adicionar serviço",
       "updateButton": "Atualizar",

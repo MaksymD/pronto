@@ -427,8 +427,8 @@ export function SettingsTabs({ business: initial, services: initServices, employ
             </div>
           </div>
           <div className="pt-2">
-            <label className="text-xs font-medium text-gray-500 block mb-1">Brand color</label>
-            <p className="text-xs text-gray-400 mb-2">Used on your public booking page.</p>
+            <label className="text-xs font-medium text-gray-500 block mb-1">{t('general.brandColorLabel')}</label>
+            <p className="text-xs text-gray-400 mb-2">{t('general.brandColorDescription')}</p>
             <div className="flex items-center gap-2">
               <input
                 type="color"
@@ -540,7 +540,7 @@ export function SettingsTabs({ business: initial, services: initServices, employ
                     <th className="text-left px-4 py-3 font-medium hidden sm:table-cell">{t('services.table.category')}</th>
                     <th className="text-right px-4 py-3 font-medium">{t('services.table.price')}</th>
                     <th className="text-right px-4 py-3 font-medium">{t('services.table.duration')}</th>
-                    <th className="text-right px-4 py-3 font-medium hidden sm:table-cell">Capacity</th>
+                    <th className="text-right px-4 py-3 font-medium hidden sm:table-cell">{t('services.table.capacity')}</th>
                     <th className="px-4 py-3" />
                   </tr>
                 </thead>
@@ -595,11 +595,11 @@ export function SettingsTabs({ business: initial, services: initServices, employ
                 </div>
               ))}
               <div>
-                <label className="text-xs font-medium text-gray-500">Capacity</label>
+                <label className="text-xs font-medium text-gray-500">{t('services.fields.capacity')}</label>
                 <input type="number" min={1} value={(svcForm.capacity as number) ?? 1}
                   onChange={(e) => setSvcForm((f) => ({ ...f, capacity: Math.max(1, Number(e.target.value)) }))}
                   className="w-full mt-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <p className="text-xs text-gray-400 mt-1">Max clients per slot (1 = individual, &gt;1 = group class)</p>
+                <p className="text-xs text-gray-400 mt-1">{t('services.fields.capacityDescription')}</p>
               </div>
             </div>
             <div className="flex gap-2 mt-4">

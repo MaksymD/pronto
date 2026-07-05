@@ -362,6 +362,8 @@
         "massage": "💆 Massage / Spa",
         "other": "🏢 Sonstiges"
       },
+      "brandColorLabel": "Markenfarbe",
+      "brandColorDescription": "Wird auf Ihrer öffentlichen Buchungsseite verwendet.",
       "bookingUrlLabel": "Öffentliche Buchungs-URL",
       "slugHint": "Nur Kleinbuchstaben, Zahlen und Bindestriche. Eine Änderung zerstört bestehende Buchungslinks.",
       "slugError": "Nur Kleinbuchstaben, Zahlen und Bindestriche erlaubt",
@@ -376,7 +378,8 @@
         "name": "Name",
         "category": "Kategorie",
         "price": "Preis",
-        "duration": "Dauer"
+        "duration": "Dauer",
+        "capacity": "Kapazität"
       },
       "addHeading": "Dienstleistung hinzufügen",
       "editHeading": "Dienstleistung bearbeiten",
@@ -384,7 +387,9 @@
         "name": "Name",
         "category": "Kategorie",
         "price": "Preis",
-        "duration": "Dauer (Min.)"
+        "duration": "Dauer (Min.)",
+        "capacity": "Kapazität",
+        "capacityDescription": "Max. Kunden pro Slot (1 = einzeln, >1 = Gruppenkurs)"
       },
       "addButton": "Dienstleistung hinzufügen",
       "updateButton": "Aktualisieren",
