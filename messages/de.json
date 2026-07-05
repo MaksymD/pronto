@@ -171,6 +171,7 @@
   },
   "pos": {
     "title": "Kasse",
+    "salesHistory": "Verkaufshistorie",
     "cart": "Warenkorb",
     "clientLabel": "Kunde",
     "walkIn": "Ohne Termin",

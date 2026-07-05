@@ -191,6 +191,7 @@
   },
   "pos": {
     "title": "PDV / Caixa",
+    "salesHistory": "Histórico de vendas",
     "cart": "Carrinho",
     "clientLabel": "Cliente",
     "walkIn": "Sem agendamento",

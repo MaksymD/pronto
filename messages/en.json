@@ -171,6 +171,7 @@
   },
   "pos": {
     "title": "POS / Checkout",
+    "salesHistory": "Sales history",
     "cart": "Cart",
     "clientLabel": "Client",
     "walkIn": "Walk-in",

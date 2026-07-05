@@ -191,6 +191,7 @@
   },
   "pos": {
     "title": "POS / Caja",
+    "salesHistory": "Historial de ventas",
     "cart": "Carrito",
     "clientLabel": "Cliente",
     "walkIn": "Sin cita",
