@@ -1,0 +1,598 @@
+{
+  "meta": {
+    "title": "Pronto — Geschäftsverwaltung für Dienstleistungsbetriebe",
+    "description": "Selbst gehostetes Kassensystem, CRM, Buchung & Omnichannel-Benachrichtigungen. Ihre Daten, Ihr Server. Keine Provision. Installation mit einem Befehl."
+  },
+  "brand": {
+    "name": "Pronto",
+    "tagline": "Geschäftsverwaltung · Keine Provision"
+  },
+  "nav": {
+    "pricing": "Preise",
+    "github": "GitHub",
+    "signIn": "Anmelden",
+    "startFree": "Kostenlos starten"
+  },
+  "landing": {
+    "badge": "Open Source · MIT-Lizenz · Docker mit einem Befehl",
+    "headline": "Geschäftsverwaltung für Dienstleistungsbetriebe",
+    "subheadline": "Kasse · CRM · Buchung · Omnichannel-Benachrichtigungen.",
+    "pitch": "Ihre Daten, Ihr Server. Keine Provision.",
+    "ctaPrimary": "Kostenlos starten",
+    "ctaGithub": "Auf GitHub ansehen",
+    "featuresHeading": "Alles, was Sie brauchen, nichts, was Sie nicht brauchen",
+    "features": {
+      "pos": "Kasse — Verkauf in 3 Klicks abschließen",
+      "crm": "CRM — vollständige Kundenhistorie in 1 Sekunde",
+      "booking": "Kalender + Online-Buchung ohne Registrierung",
+      "notifications": "Telegram- & Viber-Benachrichtigungen (kostenlos)",
+      "hosting": "Multi-Tenant-SaaS oder selbst gehostet via Docker"
+    },
+    "pricingHeading": "Einfache, transparente Preise",
+    "pricingSubheading": "Oder kostenlos selbst hosten —",
+    "pricingSubheadingLink": "auf GitHub klonen",
+    "mostPopular": "Am beliebtesten",
+    "footer": "Pronto © 2026 · MIT-Lizenz",
+    "plans": {
+      "free": { "name": "Kostenlos", "price": "0 €", "limit": "1 Mitarbeiter · 100 Kunden", "cta": "Jetzt starten" },
+      "starter": { "name": "Starter", "price": "19 €/Monat", "limit": "3 Mitarbeiter · 1.000 Kunden", "cta": "Testversion starten" },
+      "pro": { "name": "Pro", "price": "39 €/Monat", "limit": "15 Mitarbeiter · unbegrenzt", "cta": "Testversion starten" },
+      "agency": { "name": "Agentur", "price": "79 €/Monat", "limit": "Mehrere Standorte · White-Label", "cta": "Kontaktieren Sie uns" }
+    }
+  },
+  "auth": {
+    "login": {
+      "heading": "Bei Ihrem Konto anmelden",
+      "googleButton": "Mit Google fortfahren",
+      "divider": "oder",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "sie@beispiel.de",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "••••••••",
+      "submitButton": "Anmelden",
+      "noAccount": "Noch kein Konto?",
+      "createAccount": "Kostenlos erstellen",
+      "errorInvalid": "Ungültige E-Mail oder Passwort",
+      "errorGoogle": "Google-Anmeldung fehlgeschlagen"
+    },
+    "register": {
+      "heading": "Konto erstellen",
+      "subheading": "Für immer kostenlos · Keine Kreditkarte erforderlich",
+      "businessNameLabel": "Name des Unternehmens",
+      "businessNamePlaceholder": "Salon Maja",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "sie@beispiel.de",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "Mind. 8 Zeichen",
+      "submitButton": "Kostenloses Konto erstellen",
+      "alreadyHaveAccount": "Bereits ein Konto?",
+      "signIn": "Anmelden",
+      "errorNoName": "Der Unternehmensname ist erforderlich",
+      "errorCreateBusiness": "Unternehmen konnte nicht erstellt werden. Bitte erneut versuchen."
+    },
+    "checkEmail": {
+      "heading": "Prüfen Sie Ihre E-Mails",
+      "body": "Wir haben Ihnen einen Bestätigungslink gesendet. Klicken Sie darauf, um direkt zu Ihrem Konto zu gelangen.",
+      "noEmail": "Nichts erhalten?",
+      "registerAgain": "Erneut registrieren"
+    }
+  },
+  "onboarding": {
+    "logo": "Pronto",
+    "intro": "Richten wir Ihr Unternehmen in 3 Schritten ein",
+    "steps": {
+      "businessType": "Art des Unternehmens",
+      "firstService": "Erste Dienstleistung",
+      "notifications": "Benachrichtigungen"
+    },
+    "businessTypes": {
+      "salon": "💇 Kosmetik / Salon",
+      "barbershop": "✂️ Friseursalon",
+      "auto_repair": "🔧 Autowerkstatt",
+      "cafe": "☕ Café / Restaurant",
+      "dental": "🦷 Zahnklinik",
+      "fitness": "💪 Fitness / Gym",
+      "massage": "💆 Massage / Spa",
+      "other": "🏢 Sonstiges"
+    },
+    "step0": {
+      "heading": "Erzählen Sie uns von Ihrem Unternehmen",
+      "subheading": "Wir passen die Einrichtung für Sie an",
+      "bizNameLabel": "Name des Unternehmens *",
+      "bizNamePlaceholder": "Salon Maja",
+      "businessTypeLabel": "Art des Unternehmens",
+      "continue": "Weiter",
+      "slugLabel": "Ihre Pronto-URL",
+      "slugHint": "Kleinbuchstaben, Zahlen und Bindestriche · 3–30 Zeichen",
+      "slugChecking": "Wird geprüft…",
+      "slugAvailable": "Verfügbar ✓",
+      "slugTaken": "Bereits vergeben — bitte etwas anderes wählen",
+      "slugInvalid": "Nur a–z, 0–9 und Bindestriche verwenden (3–30 Zeichen)",
+      "slugPreview": "Ihre Buchungsseite:"
+    },
+    "step1": {
+      "heading": "Fügen Sie Ihre erste Dienstleistung hinzu",
+      "subheading": "Weitere können Sie später in den Einstellungen hinzufügen",
+      "serviceNameLabel": "Name der Dienstleistung *",
+      "serviceNamePlaceholder": "z. B. Haarschnitt, Maniküre…",
+      "priceLabel": "Preis *",
+      "durationLabel": "Dauer (Min.)",
+      "back": "Zurück",
+      "skip": "Überspringen",
+      "continue": "Weiter"
+    },
+    "step2": {
+      "heading": "Benachrichtigungen einrichten",
+      "subheading": "E-Mail ist sofort einsatzbereit. Telegram, Viber oder WhatsApp können Sie später optional unter Einstellungen → Benachrichtigungen verbinden.",
+      "emailChannel": "E-Mail (Resend / SMTP)",
+      "emailChannelSub": "Buchungsbestätigungen & Erinnerungen",
+      "emailChannelStatus": "Automatisch aktiviert",
+      "messengerChannel": "Telegram · Viber · WhatsApp",
+      "messengerChannelSub": "Tokens später unter Einstellungen → Benachrichtigungen hinzufügen",
+      "messengerChannelStatus": "Optional",
+      "back": "Zurück",
+      "settingUp": "Wird eingerichtet…",
+      "submit": "Zum Dashboard →",
+      "error": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "stats": {
+      "revenueToday": "Umsatz heute",
+      "appointmentsToday": "Termine heute",
+      "totalClients": "Kunden insgesamt"
+    },
+    "upcomingAppointments": {
+      "heading": "Anstehende Termine",
+      "viewAll": "Alle anzeigen",
+      "empty": "Keine anstehenden Termine.",
+      "addOne": "Termin hinzufügen",
+      "walkIn": "Ohne Termin"
+    },
+    "recentSales": {
+      "heading": "Letzte Verkäufe",
+      "viewAll": "Verkaufshistorie →",
+      "empty": "Noch keine Verkäufe.",
+      "makeFirst": "Ersten Verkauf tätigen",
+      "walkIn": "Ohne Termin"
+    },
+    "appointmentStatus": {
+      "pending": "ausstehend",
+      "confirmed": "bestätigt",
+      "completed": "abgeschlossen",
+      "paid": "bezahlt",
+      "cancelled": "abgesagt",
+      "no_show": "nicht erschienen"
+    }
+  },
+  "pos": {
+    "title": "Kasse",
+    "cart": "Warenkorb",
+    "clientLabel": "Kunde",
+    "walkIn": "Ohne Termin",
+    "employeeLabel": "Mitarbeiter",
+    "anyEmployee": "Beliebig",
+    "emptyCart": "Dienstleistung antippen, um hinzuzufügen",
+    "discountLabel": "Rabatt",
+    "paymentMethods": {
+      "cash": "bar",
+      "card": "karte",
+      "transfer": "überweisung"
+    },
+    "totalLabel": "Gesamt",
+    "processing": "Wird verarbeitet…",
+    "chargeButton": "Kassieren",
+    "servicesTab": "Dienstleistungen",
+    "noServices": "Noch keine Dienstleistungen.",
+    "addServices": "Dienstleistungen hinzufügen",
+    "bookingBanner": "Abrechnung für Termin:",
+    "success": {
+      "heading": "Verkauf abgeschlossen!",
+      "receipt": "Beleg",
+      "newSale": "Neuer Verkauf"
+    }
+  },
+  "crm": {
+    "title": "Kunden",
+    "addClient": "Kunde hinzufügen",
+    "searchPlaceholder": "Suche nach Name, Telefon, E-Mail…",
+    "empty": {
+      "icon": "👥",
+      "heading": "Noch keine Kunden",
+      "action": "Ersten Kunden hinzufügen"
+    },
+    "table": {
+      "name": "Name",
+      "contact": "Kontakt",
+      "tags": "Tags",
+      "lastService": "Letzte Dienstleistung",
+      "visits": "Besuche",
+      "spent": "Ausgegeben",
+      "lastVisit": "Letzter Besuch"
+    }
+  },
+  "booking": {
+    "title": "Buchung",
+    "newAppointment": "Neuer Termin",
+    "emptyState": {
+      "heading": "Keine Termine diese Woche",
+      "sub": "Klicken Sie auf einen Zeitslot im Kalender oder nutzen Sie die Schaltfläche, um einen hinzuzufügen"
+    },
+    "calendar": {
+      "today": "Heute",
+      "publicPage": "Öffentliche Buchungsseite",
+      "days": ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+    },
+    "status": {
+      "pending": "ausstehend",
+      "confirmed": "bestätigt",
+      "completed": "abgeschlossen",
+      "paid": "bezahlt",
+      "cancelled": "abgesagt",
+      "no_show": "nicht erschienen"
+    },
+    "walkIn": "Ohne Termin",
+    "form": {
+      "heading": "Neuer Termin",
+      "serviceLabel": "Dienstleistung *",
+      "servicePlaceholder": "Dienstleistung auswählen…",
+      "datetimeLabel": "Datum & Uhrzeit *",
+      "clientLabel": "Kunde",
+      "employeeLabel": "Mitarbeiter",
+      "anyEmployee": "Beliebig",
+      "notesLabel": "Notizen",
+      "notesPlaceholder": "Optionale Notiz…",
+      "cancel": "Abbrechen",
+      "saving": "Wird gespeichert…",
+      "save": "Speichern",
+      "closedDayError": "Dieser Tag ist in den Öffnungszeiten als geschlossen markiert. Bitte zuerst den Zeitplan in den Einstellungen anpassen."
+    },
+    "detail": {
+      "statusLabel": "Status",
+      "employeeLabel": "Mitarbeiter:",
+      "chargeButton": "Kassieren",
+      "close": "Schließen"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": "Allgemein",
+      "services": "Dienstleistungen",
+      "employees": "Mitarbeiter",
+      "notifications": "Benachrichtigungen",
+      "billing": "Abrechnung",
+      "account": "Konto"
+    },
+    "billing": {
+      "heading": "Aktueller Tarif",
+      "planSuffix": "Tarif",
+      "freePlan": "Kostenlos",
+      "activePlan": "Aktiv",
+      "renewsOn": "Verlängert sich am",
+      "employees": "Mitarbeiter",
+      "clients": "Kunden",
+      "manageSubscription": "Abonnement verwalten",
+      "mostPopular": "Am beliebtesten",
+      "upgrade": "Upgrade →",
+      "currentPlan": "Aktueller Tarif",
+      "successMessage": "Abonnement aktiviert! Danke für das Upgrade.",
+      "errorMessage": "Etwas ist schiefgelaufen. Bitte erneut versuchen oder den Support kontaktieren."
+    },
+    "account": {
+      "heading": "Mein Konto",
+      "currentEmailLabel": "Aktuelle E-Mail",
+      "newEmailLabel": "Neue E-Mail",
+      "newEmailPlaceholder": "Neue E-Mail-Adresse eingeben",
+      "changeEmailButton": "E-Mail ändern",
+      "emailHint": "An die neue Adresse wird ein Bestätigungslink gesendet. Die Änderung wird nach dem Klicken wirksam.",
+      "passwordHeading": "Passwort ändern",
+      "newPasswordLabel": "Neues Passwort",
+      "confirmPasswordLabel": "Neues Passwort bestätigen",
+      "confirmPasswordPlaceholder": "Neues Passwort wiederholen",
+      "changePasswordButton": "Passwort aktualisieren",
+      "saving": "Wird gespeichert…"
+    },
+    "workingHours": {
+      "heading": "Öffnungszeiten",
+      "dayNames": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+      "from": "Von",
+      "to": "Bis",
+      "closed": "Geschlossen",
+      "saveButton": "Zeiten speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert ✓"
+    },
+    "general": {
+      "heading": "Unternehmensdaten",
+      "fields": {
+        "name": "Name des Unternehmens",
+        "phone": "Telefon",
+        "email": "E-Mail",
+        "address": "Adresse",
+        "timezone": "Zeitzone",
+        "currency": "Währung (ISO)",
+        "slug": "URL-Kennung"
+      },
+      "typeLabel": "Art des Unternehmens",
+      "typeDefault": "— auswählen —",
+      "types": {
+        "salon": "💇 Kosmetik / Salon",
+        "barbershop": "✂️ Friseursalon",
+        "auto_repair": "🔧 Autowerkstatt",
+        "cafe": "☕ Café / Restaurant",
+        "dental": "🦷 Zahnklinik",
+        "fitness": "💪 Fitness / Gym",
+        "massage": "💆 Massage / Spa",
+        "other": "🏢 Sonstiges"
+      },
+      "bookingUrlLabel": "Öffentliche Buchungs-URL",
+      "slugHint": "Nur Kleinbuchstaben, Zahlen und Bindestriche. Eine Änderung zerstört bestehende Buchungslinks.",
+      "slugError": "Nur Kleinbuchstaben, Zahlen und Bindestriche erlaubt",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert",
+      "saveButton": "Änderungen speichern",
+      "planLabel": "Tarif:"
+    },
+    "services": {
+      "empty": "Noch keine Dienstleistungen",
+      "table": {
+        "name": "Name",
+        "category": "Kategorie",
+        "price": "Preis",
+        "duration": "Dauer"
+      },
+      "addHeading": "Dienstleistung hinzufügen",
+      "editHeading": "Dienstleistung bearbeiten",
+      "fields": {
+        "name": "Name",
+        "category": "Kategorie",
+        "price": "Preis",
+        "duration": "Dauer (Min.)"
+      },
+      "addButton": "Dienstleistung hinzufügen",
+      "updateButton": "Aktualisieren",
+      "cancelButton": "Abbrechen",
+      "deleteConfirm": "Löschen?",
+      "deleteYes": "Löschen",
+      "deleteNo": "Abbrechen"
+    },
+    "employees": {
+      "empty": "Noch keine Mitarbeiter",
+      "table": {
+        "name": "Name",
+        "role": "Rolle",
+        "contact": "E-Mail",
+        "phone": "Telefon"
+      },
+      "addHeading": "Mitarbeiter hinzufügen",
+      "editHeading": "Mitarbeiter bearbeiten",
+      "fields": {
+        "name": "Vollständiger Name",
+        "role": "Rolle",
+        "email": "E-Mail",
+        "phone": "Telefon"
+      },
+      "addButton": "Mitarbeiter hinzufügen",
+      "updateButton": "Aktualisieren",
+      "cancelButton": "Abbrechen",
+      "deleteConfirm": "Entfernen?",
+      "deleteYes": "Entfernen",
+      "deleteNo": "Abbrechen"
+    },
+    "notifications": {
+      "heading": "Benachrichtigungskanäle",
+      "email": {
+        "label": "E-Mail",
+        "connected": "Verbunden",
+        "notSet": "Nicht konfiguriert",
+        "smtpOption": "SMTP-Server (empfohlen für Selbsthosting)",
+        "resendOption": "Resend-API",
+        "smtpHost": "SMTP-Host",
+        "smtpPort": "SMTP-Port",
+        "smtpUser": "Benutzername",
+        "smtpPass": "Passwort",
+        "smtpFrom": "Absenderadresse",
+        "smtpHostPlaceholder": "smtp.gmail.com",
+        "smtpFromPlaceholder": "hallo@meinunternehmen.de",
+        "resendApiKey": "API-Schlüssel",
+        "resendApiKeyPlaceholder": "re_...",
+        "resendSignup": "Kostenlosen API-Schlüssel auf resend.com erhalten"
+      },
+      "telegram": {
+        "label": "Telegram-Bot",
+        "connected": "Verbunden",
+        "notSet": "Nicht konfiguriert",
+        "description": "Erstellen Sie einen Bot über @BotFather und fügen Sie den Token unten ein.",
+        "placeholder": "123456789:AAABBB...",
+        "connectButton": "Verbinden"
+      },
+      "viber": {
+        "label": "Viber-Bot",
+        "connected": "Verbunden",
+        "notSet": "Nicht konfiguriert",
+        "description": "Erstellen Sie einen Bot auf partners.viber.com und fügen Sie den Auth-Token ein.",
+        "placeholder": "Viber-Auth-Token",
+        "connectButton": "Verbinden"
+      },
+      "whatsapp": {
+        "label": "WhatsApp (Meta Cloud API)",
+        "connected": "Verbunden",
+        "notSet": "Nicht konfiguriert",
+        "description": "Sendet Nachrichten direkt an Kunden, deren WhatsApp-Nummer im CRM gespeichert ist. Wird über Server-Umgebungsvariablen konfiguriert."
+      },
+      "ownerWhatsapp": {
+        "label": "Ihre WhatsApp-Nummer (für Benachrichtigungen)",
+        "description": "Geben Sie Ihre persönliche WhatsApp-Nummer ein, um Buchungsbenachrichtigungen und andere Inhaber-Benachrichtigungen zu erhalten. Format: +491234567890",
+        "placeholder": "+491234567890"
+      },
+      "save": "Speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert ✓",
+      "triggersHeading": "Automatisierte Auslöser",
+      "triggers": {
+        "confirmation": "Buchungsbestätigung — sofort",
+        "reminder24h": "Erinnerung — 24 Stunden vorher",
+        "reminder1h": "Erinnerung — 1 Stunde vorher",
+        "thankYou": "Dankeschön — nach dem Besuch",
+        "reactivation": "Reaktivierung — 30 Tage ohne Besuch",
+        "birthday": "Geburtstagsgruß"
+      }
+    }
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "pos": "Kasse",
+    "clients": "Kunden",
+    "booking": "Buchung",
+    "settings": "Einstellungen",
+    "signOut": "Abmelden"
+  },
+  "publicBooking": {
+    "selectService": {
+      "heading": "Dienstleistung auswählen",
+      "empty": "Keine Dienstleistungen für die Online-Buchung verfügbar.",
+      "minutes": "{duration} Min."
+    },
+    "selectEmployee": {
+      "heading": "Fachkraft wählen",
+      "sub": "Sie können jede Fachkraft wählen — alle sind großartig",
+      "anyone": "Keine Präferenz",
+      "back": "← Zurück"
+    },
+    "datetime": {
+      "heading": "Datum & Uhrzeit wählen",
+      "back": "← Zurück",
+      "dateLabel": "Datum",
+      "timeLabel": "Uhrzeit",
+      "continue": "Weiter"
+    },
+    "contact": {
+      "heading": "Ihre Kontaktdaten",
+      "back": "← Zurück",
+      "nameLabel": "Name *",
+      "namePlaceholder": "Ihr Name",
+      "phoneLabel": "Telefon",
+      "phonePlaceholder": "+49 123 4567890",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "sie@beispiel.de",
+      "booking": "Wird bestätigt…",
+      "confirm": "Termin bestätigen — {price}",
+      "noRegistration": "Keine Registrierung erforderlich"
+    },
+    "success": {
+      "heading": "Termin bestätigt!",
+      "body": "Ihr Termin ist bestätigt. Bis bald!",
+      "bookAnother": "Weiteren Termin buchen",
+      "optInHeading": "Erinnerungen in Ihrem Messenger erhalten",
+      "optInSub": "Tippen Sie unten, um Terminerinnerungen per Telegram oder Viber zu erhalten — ohne Registrierung.",
+      "telegramButton": "Erinnerungen per Telegram erhalten",
+      "viberButton": "Erinnerungen per Viber erhalten"
+    }
+  },
+  "clientDetail": {
+    "backToClients": "← Kunden",
+    "editButton": "Bearbeiten",
+    "saveButton": "Speichern",
+    "cancelButton": "Abbrechen",
+    "deleteButton": "Kunde löschen",
+    "deleteConfirm": "Diesen Kunden löschen? Dies kann nicht rückgängig gemacht werden.",
+    "fields": {
+      "name": "Name",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "birthday": "Geburtstag",
+      "notes": "Notizen",
+      "notesPlaceholder": "Notiz hinzufügen…",
+      "tags": "Tags",
+      "tagsPlaceholder": "Tag1, Tag2…",
+      "whatsappNumber": "WhatsApp",
+      "messengers": "Messenger",
+      "connected": "Verbunden ✓",
+      "notConnected": "Nicht verbunden"
+    },
+    "stats": {
+      "totalVisits": "Besuche insgesamt",
+      "totalSpent": "Ausgegeben insgesamt",
+      "lastVisit": "Letzter Besuch",
+      "never": "Nie",
+      "clientSince": "Kunde seit"
+    },
+    "appointments": {
+      "heading": "Besuchshistorie",
+      "empty": "Noch keine Besuche"
+    },
+    "status": {
+      "pending": "ausstehend",
+      "confirmed": "bestätigt",
+      "completed": "abgeschlossen",
+      "paid": "bezahlt",
+      "cancelled": "abgesagt",
+      "no_show": "nicht erschienen"
+    }
+  },
+  "transactions": {
+    "title": "Verkaufshistorie",
+    "filters": {
+      "allMethods": "Alle Methoden",
+      "cash": "Bar",
+      "card": "Karte",
+      "transfer": "Überweisung",
+      "online": "Online",
+      "from": "Von",
+      "to": "Bis"
+    },
+    "table": {
+      "receipt": "Beleg",
+      "client": "Kunde",
+      "employee": "Mitarbeiter",
+      "items": "Dienstleistungen / Artikel",
+      "method": "Methode",
+      "amount": "Betrag",
+      "date": "Datum"
+    },
+    "walkIn": "Ohne Termin",
+    "unassigned": "—",
+    "empty": "Noch keine Verkäufe",
+    "total": "Gesamt für Zeitraum:",
+    "itemCount": "{count} Artikel",
+    "itemCountPlural": "{count} Artikel",
+    "moreItems": "+ {count} weitere"
+  },
+  "billing": {
+    "heading": "Ihr Tarif",
+    "planSuffix": "Tarif",
+    "freePlan": "Kostenlos",
+    "activePlan": "Aktiv",
+    "renewsOn": "Verlängert sich am",
+    "employees": "Mitarbeiter",
+    "clients": "Kunden",
+    "manageSubscription": "Abonnement verwalten",
+    "mostPopular": "Am beliebtesten",
+    "upgrade": "Upgrade →",
+    "currentPlan": "Aktueller Tarif",
+    "successMessage": "🎉 Abonnement aktiviert! Danke für das Upgrade.",
+    "errorMessage": "Etwas ist schiefgelaufen. Bitte erneut versuchen oder den Support kontaktieren."
+  },
+  "newClient": {
+    "title": "Neuer Kunde",
+    "backToClients": "← Kunden",
+    "fields": {
+      "name": "Vollständiger Name *",
+      "namePlaceholder": "Anna Schmidt",
+      "phone": "Telefon",
+      "phonePlaceholder": "+49 123 4567890",
+      "email": "E-Mail",
+      "emailPlaceholder": "anna@beispiel.de",
+      "whatsapp": "WhatsApp",
+      "whatsappPlaceholder": "+491234567890",
+      "birthday": "Geburtstag",
+      "notes": "Notizen",
+      "notesPlaceholder": "Beliebige Notizen…",
+      "tags": "Tags",
+      "tagsPlaceholder": "Stammkunde, VIP…"
+    },
+    "submitButton": "Kunde hinzufügen",
+    "cancelButton": "Abbrechen"
+  }
+}

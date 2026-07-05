@@ -1,0 +1,598 @@
+{
+  "meta": {
+    "title": "Pronto — Управління бізнесом для сервісних компаній",
+    "description": "Каса, CRM, бронювання та багатоканальні сповіщення на власному сервері. Ваші дані, ваш сервер. Без комісії. Встановлення однією командою."
+  },
+  "brand": {
+    "name": "Pronto",
+    "tagline": "Управління бізнесом · Без комісії"
+  },
+  "nav": {
+    "pricing": "Тарифи",
+    "github": "GitHub",
+    "signIn": "Увійти",
+    "startFree": "Почати безкоштовно"
+  },
+  "landing": {
+    "badge": "Відкритий код · Ліцензія MIT · Docker однією командою",
+    "headline": "Управління бізнесом для сервісних компаній",
+    "subheadline": "Каса · CRM · Бронювання · Багатоканальні сповіщення.",
+    "pitch": "Ваші дані, ваш сервер. Без комісії.",
+    "ctaPrimary": "Почати безкоштовно",
+    "ctaGithub": "Дивитись на GitHub",
+    "featuresHeading": "Усе, що потрібно, і нічого зайвого",
+    "features": {
+      "pos": "Каса — оформлення продажу за 3 кліки",
+      "crm": "CRM — повна історія клієнта за 1 секунду",
+      "booking": "Календар + онлайн-бронювання без реєстрації",
+      "notifications": "Сповіщення в Telegram і Viber (безкоштовно)",
+      "hosting": "Мультитенантний SaaS або власний сервер через Docker"
+    },
+    "pricingHeading": "Прості, прозорі тарифи",
+    "pricingSubheading": "Або розгорніть безкоштовно на власному сервері —",
+    "pricingSubheadingLink": "клонуйте на GitHub",
+    "mostPopular": "Найпопулярніший",
+    "footer": "Pronto © 2026 · Ліцензія MIT",
+    "plans": {
+      "free": { "name": "Безкоштовний", "price": "0 ₴", "limit": "1 співробітник · 100 клієнтів", "cta": "Почати" },
+      "starter": { "name": "Стартовий", "price": "19 $/міс", "limit": "3 співробітники · 1000 клієнтів", "cta": "Почати пробний період" },
+      "pro": { "name": "Pro", "price": "39 $/міс", "limit": "15 співробітників · без обмежень", "cta": "Почати пробний період" },
+      "agency": { "name": "Агенція", "price": "79 $/міс", "limit": "Кілька філій · White-label", "cta": "Зв'язатися з нами" }
+    }
+  },
+  "auth": {
+    "login": {
+      "heading": "Увійти до вашого облікового запису",
+      "googleButton": "Продовжити з Google",
+      "divider": "або",
+      "emailLabel": "Email",
+      "emailPlaceholder": "vy@example.com",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "••••••••",
+      "submitButton": "Увійти",
+      "noAccount": "Немає облікового запису?",
+      "createAccount": "Створити безкоштовно",
+      "errorInvalid": "Невірний email або пароль",
+      "errorGoogle": "Помилка входу через Google"
+    },
+    "register": {
+      "heading": "Створіть свій обліковий запис",
+      "subheading": "Безкоштовно назавжди · Кредитна картка не потрібна",
+      "businessNameLabel": "Назва бізнесу",
+      "businessNamePlaceholder": "Салон краси «Мрія»",
+      "emailLabel": "Email",
+      "emailPlaceholder": "vy@example.com",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "Мін. 8 символів",
+      "submitButton": "Створити безкоштовний обліковий запис",
+      "alreadyHaveAccount": "Вже маєте обліковий запис?",
+      "signIn": "Увійти",
+      "errorNoName": "Назва бізнесу є обов'язковою",
+      "errorCreateBusiness": "Не вдалося створити бізнес. Спробуйте ще раз."
+    },
+    "checkEmail": {
+      "heading": "Перевірте свою електронну пошту",
+      "body": "Ми надіслали вам лист із посиланням для підтвердження. Натисніть на нього, і ви одразу потрапите до свого облікового запису.",
+      "noEmail": "Не отримали листа?",
+      "registerAgain": "Зареєструватися ще раз"
+    }
+  },
+  "onboarding": {
+    "logo": "Pronto",
+    "intro": "Налаштуємо ваш бізнес за 3 кроки",
+    "steps": {
+      "businessType": "Тип бізнесу",
+      "firstService": "Перша послуга",
+      "notifications": "Сповіщення"
+    },
+    "businessTypes": {
+      "salon": "💇 Краса / Салон",
+      "barbershop": "✂️ Барбершоп",
+      "auto_repair": "🔧 Автосервіс",
+      "cafe": "☕ Кафе / Ресторан",
+      "dental": "🦷 Стоматологія",
+      "fitness": "💪 Фітнес / Тренажерний зал",
+      "massage": "💆 Масаж / Спа",
+      "other": "🏢 Інше"
+    },
+    "step0": {
+      "heading": "Розкажіть про свій бізнес",
+      "subheading": "Ми налаштуємо все саме для вас",
+      "bizNameLabel": "Назва бізнесу *",
+      "bizNamePlaceholder": "Салон краси «Мрія»",
+      "businessTypeLabel": "Тип бізнесу",
+      "continue": "Далі",
+      "slugLabel": "Ваша URL-адреса Pronto",
+      "slugHint": "Малі латинські букви, цифри та дефіси · 3–30 символів",
+      "slugChecking": "Перевірка…",
+      "slugAvailable": "Доступно ✓",
+      "slugTaken": "Вже зайнято — спробуйте іншу назву",
+      "slugInvalid": "Використовуйте лише a–z, 0–9 і дефіси (3–30 символів)",
+      "slugPreview": "Ваша сторінка бронювання:"
+    },
+    "step1": {
+      "heading": "Додайте вашу першу послугу",
+      "subheading": "Інші можна додати пізніше в налаштуваннях",
+      "serviceNameLabel": "Назва послуги *",
+      "serviceNamePlaceholder": "напр. Стрижка, Манікюр…",
+      "priceLabel": "Ціна *",
+      "durationLabel": "Тривалість (хв)",
+      "back": "Назад",
+      "skip": "Пропустити",
+      "continue": "Далі"
+    },
+    "step2": {
+      "heading": "Налаштуйте сповіщення",
+      "subheading": "Email готовий одразу. За бажанням можна підключити Telegram, Viber або WhatsApp пізніше в Налаштуваннях → Сповіщення.",
+      "emailChannel": "Email (Resend / SMTP)",
+      "emailChannelSub": "Підтвердження та нагадування про бронювання",
+      "emailChannelStatus": "Увімкнено автоматично",
+      "messengerChannel": "Telegram · Viber · WhatsApp",
+      "messengerChannelSub": "Додайте токени пізніше в Налаштуваннях → Сповіщення",
+      "messengerChannelStatus": "Необов'язково",
+      "back": "Назад",
+      "settingUp": "Налаштування…",
+      "submit": "До панелі керування →",
+      "error": "Щось пішло не так. Спробуйте ще раз."
+    }
+  },
+  "dashboard": {
+    "title": "Панель керування",
+    "stats": {
+      "revenueToday": "Виручка сьогодні",
+      "appointmentsToday": "Записів сьогодні",
+      "totalClients": "Усього клієнтів"
+    },
+    "upcomingAppointments": {
+      "heading": "Найближчі записи",
+      "viewAll": "Переглянути всі",
+      "empty": "Немає майбутніх записів.",
+      "addOne": "Додати запис",
+      "walkIn": "Без запису"
+    },
+    "recentSales": {
+      "heading": "Останні продажі",
+      "viewAll": "Історія продажів →",
+      "empty": "Ще немає продажів.",
+      "makeFirst": "Зробити перший продаж",
+      "walkIn": "Без запису"
+    },
+    "appointmentStatus": {
+      "pending": "очікує",
+      "confirmed": "підтверджено",
+      "completed": "завершено",
+      "paid": "оплачено",
+      "cancelled": "скасовано",
+      "no_show": "не з'явився"
+    }
+  },
+  "pos": {
+    "title": "Каса",
+    "cart": "Кошик",
+    "clientLabel": "Клієнт",
+    "walkIn": "Без запису",
+    "employeeLabel": "Співробітник",
+    "anyEmployee": "Будь-який",
+    "emptyCart": "Торкніться послуги, щоб додати",
+    "discountLabel": "Знижка",
+    "paymentMethods": {
+      "cash": "готівка",
+      "card": "картка",
+      "transfer": "переказ"
+    },
+    "totalLabel": "Разом",
+    "processing": "Обробка…",
+    "chargeButton": "Оплатити",
+    "servicesTab": "Послуги",
+    "noServices": "Ще немає послуг.",
+    "addServices": "Додати послуги",
+    "bookingBanner": "Оплата за запис:",
+    "success": {
+      "heading": "Продаж завершено!",
+      "receipt": "Чек",
+      "newSale": "Новий продаж"
+    }
+  },
+  "crm": {
+    "title": "Клієнти",
+    "addClient": "Додати клієнта",
+    "searchPlaceholder": "Пошук за іменем, телефоном, email…",
+    "empty": {
+      "icon": "👥",
+      "heading": "Ще немає клієнтів",
+      "action": "Додати першого клієнта"
+    },
+    "table": {
+      "name": "Ім'я",
+      "contact": "Контакт",
+      "tags": "Теги",
+      "lastService": "Остання послуга",
+      "visits": "Візити",
+      "spent": "Витрачено",
+      "lastVisit": "Останній візит"
+    }
+  },
+  "booking": {
+    "title": "Бронювання",
+    "newAppointment": "Новий запис",
+    "emptyState": {
+      "heading": "Немає записів на цьому тижні",
+      "sub": "Натисніть на слот у календарі або скористайтеся кнопкою, щоб додати запис"
+    },
+    "calendar": {
+      "today": "Сьогодні",
+      "publicPage": "Публічна сторінка бронювання",
+      "days": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"]
+    },
+    "status": {
+      "pending": "очікує",
+      "confirmed": "підтверджено",
+      "completed": "завершено",
+      "paid": "оплачено",
+      "cancelled": "скасовано",
+      "no_show": "не з'явився"
+    },
+    "walkIn": "Без запису",
+    "form": {
+      "heading": "Новий запис",
+      "serviceLabel": "Послуга *",
+      "servicePlaceholder": "Оберіть послугу…",
+      "datetimeLabel": "Дата та час *",
+      "clientLabel": "Клієнт",
+      "employeeLabel": "Співробітник",
+      "anyEmployee": "Будь-який",
+      "notesLabel": "Примітки",
+      "notesPlaceholder": "Необов'язкова примітка…",
+      "cancel": "Скасувати",
+      "saving": "Збереження…",
+      "save": "Зберегти",
+      "closedDayError": "Цей день позначено як вихідний у робочому графіку. Спершу оновіть графік у налаштуваннях."
+    },
+    "detail": {
+      "statusLabel": "Статус",
+      "employeeLabel": "Співробітник:",
+      "chargeButton": "Оплатити",
+      "close": "Закрити"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": "Загальні",
+      "services": "Послуги",
+      "employees": "Співробітники",
+      "notifications": "Сповіщення",
+      "billing": "Оплата",
+      "account": "Облік. запис"
+    },
+    "billing": {
+      "heading": "Ваш тариф",
+      "planSuffix": "тариф",
+      "freePlan": "Безкоштовний",
+      "activePlan": "Активний",
+      "renewsOn": "Продовжується",
+      "employees": "Співробітники",
+      "clients": "Клієнти",
+      "manageSubscription": "Керувати підпискою",
+      "mostPopular": "Найпопулярніший",
+      "upgrade": "Покращити →",
+      "currentPlan": "Поточний тариф",
+      "successMessage": "Підписку активовано! Дякуємо за оновлення.",
+      "errorMessage": "Щось пішло не так. Спробуйте ще раз або зверніться до підтримки."
+    },
+    "account": {
+      "heading": "Мій облік. запис",
+      "currentEmailLabel": "Поточний email",
+      "newEmailLabel": "Новий email",
+      "newEmailPlaceholder": "Введіть нову email-адресу",
+      "changeEmailButton": "Змінити email",
+      "emailHint": "На нову адресу буде надіслано посилання для підтвердження. Зміна набуде чинності після натискання.",
+      "passwordHeading": "Змінити пароль",
+      "newPasswordLabel": "Новий пароль",
+      "confirmPasswordLabel": "Підтвердіть новий пароль",
+      "confirmPasswordPlaceholder": "Повторіть новий пароль",
+      "changePasswordButton": "Оновити пароль",
+      "saving": "Збереження…"
+    },
+    "workingHours": {
+      "heading": "Робочий графік",
+      "dayNames": ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+      "from": "Від",
+      "to": "До",
+      "closed": "Вихідний",
+      "saveButton": "Зберегти графік",
+      "saving": "Збереження…",
+      "saved": "Збережено ✓"
+    },
+    "general": {
+      "heading": "Дані бізнесу",
+      "fields": {
+        "name": "Назва бізнесу",
+        "phone": "Телефон",
+        "email": "Email",
+        "address": "Адреса",
+        "timezone": "Часовий пояс",
+        "currency": "Валюта (ISO)",
+        "slug": "URL-ідентифікатор"
+      },
+      "typeLabel": "Тип бізнесу",
+      "typeDefault": "— оберіть —",
+      "types": {
+        "salon": "💇 Краса / Салон",
+        "barbershop": "✂️ Барбершоп",
+        "auto_repair": "🔧 Автосервіс",
+        "cafe": "☕ Кафе / Ресторан",
+        "dental": "🦷 Стоматологія",
+        "fitness": "💪 Фітнес / Тренажерний зал",
+        "massage": "💆 Масаж / Спа",
+        "other": "🏢 Інше"
+      },
+      "bookingUrlLabel": "Публічна URL-адреса бронювання",
+      "slugHint": "Лише малі латинські букви, цифри та дефіси. Зміна порушить наявні посилання на бронювання.",
+      "slugError": "Дозволені лише малі латинські букви, цифри та дефіси",
+      "saving": "Збереження…",
+      "saved": "Збережено",
+      "saveButton": "Зберегти зміни",
+      "planLabel": "Тариф:"
+    },
+    "services": {
+      "empty": "Ще немає послуг",
+      "table": {
+        "name": "Назва",
+        "category": "Категорія",
+        "price": "Ціна",
+        "duration": "Тривалість"
+      },
+      "addHeading": "Додати послугу",
+      "editHeading": "Редагувати послугу",
+      "fields": {
+        "name": "Назва",
+        "category": "Категорія",
+        "price": "Ціна",
+        "duration": "Тривалість (хв)"
+      },
+      "addButton": "Додати послугу",
+      "updateButton": "Оновити",
+      "cancelButton": "Скасувати",
+      "deleteConfirm": "Видалити?",
+      "deleteYes": "Видалити",
+      "deleteNo": "Скасувати"
+    },
+    "employees": {
+      "empty": "Ще немає співробітників",
+      "table": {
+        "name": "Ім'я",
+        "role": "Роль",
+        "contact": "Email",
+        "phone": "Телефон"
+      },
+      "addHeading": "Додати співробітника",
+      "editHeading": "Редагувати співробітника",
+      "fields": {
+        "name": "Повне ім'я",
+        "role": "Роль",
+        "email": "Email",
+        "phone": "Телефон"
+      },
+      "addButton": "Додати співробітника",
+      "updateButton": "Оновити",
+      "cancelButton": "Скасувати",
+      "deleteConfirm": "Видалити?",
+      "deleteYes": "Видалити",
+      "deleteNo": "Скасувати"
+    },
+    "notifications": {
+      "heading": "Канали сповіщень",
+      "email": {
+        "label": "Email",
+        "connected": "Підключено",
+        "notSet": "Не налаштовано",
+        "smtpOption": "SMTP-сервер (рекомендовано для власного сервера)",
+        "resendOption": "Resend API",
+        "smtpHost": "SMTP-хост",
+        "smtpPort": "SMTP-порт",
+        "smtpUser": "Ім'я користувача",
+        "smtpPass": "Пароль",
+        "smtpFrom": "Адреса відправника",
+        "smtpHostPlaceholder": "smtp.gmail.com",
+        "smtpFromPlaceholder": "hello@mybusiness.com",
+        "resendApiKey": "API-ключ",
+        "resendApiKeyPlaceholder": "re_...",
+        "resendSignup": "Отримати безкоштовний API-ключ на resend.com"
+      },
+      "telegram": {
+        "label": "Telegram-бот",
+        "connected": "Підключено",
+        "notSet": "Не налаштовано",
+        "description": "Створіть бота через @BotFather і вставте токен нижче.",
+        "placeholder": "123456789:AAABBB...",
+        "connectButton": "Підключити"
+      },
+      "viber": {
+        "label": "Viber-бот",
+        "connected": "Підключено",
+        "notSet": "Не налаштовано",
+        "description": "Створіть бота на partners.viber.com і вставте токен авторизації.",
+        "placeholder": "Токен авторизації Viber",
+        "connectButton": "Підключити"
+      },
+      "whatsapp": {
+        "label": "WhatsApp (Meta Cloud API)",
+        "connected": "Підключено",
+        "notSet": "Не налаштовано",
+        "description": "Надсилає повідомлення безпосередньо клієнтам, чий номер WhatsApp збережено в CRM. Налаштовується через змінні середовища сервера."
+      },
+      "ownerWhatsapp": {
+        "label": "Ваш номер WhatsApp (для сповіщень)",
+        "description": "Введіть свій особистий номер WhatsApp, щоб отримувати сповіщення про бронювання та інші сповіщення власника. Формат: +380991234567",
+        "placeholder": "+380991234567"
+      },
+      "save": "Зберегти",
+      "saving": "Збереження…",
+      "saved": "Збережено ✓",
+      "triggersHeading": "Автоматичні тригери",
+      "triggers": {
+        "confirmation": "Підтвердження бронювання — миттєво",
+        "reminder24h": "Нагадування — за 24 години",
+        "reminder1h": "Нагадування — за 1 годину",
+        "thankYou": "Подяка — після візиту",
+        "reactivation": "Реактивація — 30 днів без візиту",
+        "birthday": "Вітання з днем народження"
+      }
+    }
+  },
+  "sidebar": {
+    "dashboard": "Панель",
+    "pos": "Каса",
+    "clients": "Клієнти",
+    "booking": "Бронювання",
+    "settings": "Налаштування",
+    "signOut": "Вийти"
+  },
+  "publicBooking": {
+    "selectService": {
+      "heading": "Оберіть послугу",
+      "empty": "Немає послуг, доступних для онлайн-бронювання.",
+      "minutes": "{duration} хв"
+    },
+    "selectEmployee": {
+      "heading": "Оберіть спеціаліста",
+      "sub": "Можете обрати будь-кого — усі наші фахівці чудові",
+      "anyone": "Без переваг",
+      "back": "← Назад"
+    },
+    "datetime": {
+      "heading": "Оберіть дату та час",
+      "back": "← Назад",
+      "dateLabel": "Дата",
+      "timeLabel": "Час",
+      "continue": "Далі"
+    },
+    "contact": {
+      "heading": "Ваші контактні дані",
+      "back": "← Назад",
+      "nameLabel": "Ім'я *",
+      "namePlaceholder": "Ваше ім'я",
+      "phoneLabel": "Телефон",
+      "phonePlaceholder": "+380 99 123 4567",
+      "emailLabel": "Email",
+      "emailPlaceholder": "vy@example.com",
+      "booking": "Підтвердження…",
+      "confirm": "Підтвердити запис — {price}",
+      "noRegistration": "Реєстрація не потрібна"
+    },
+    "success": {
+      "heading": "Запис підтверджено!",
+      "body": "Ваш запис підтверджено. До зустрічі!",
+      "bookAnother": "Записатися ще раз",
+      "optInHeading": "Отримуйте нагадування в месенджері",
+      "optInSub": "Натисніть нижче, щоб отримувати нагадування про запис у Telegram або Viber — без реєстрації.",
+      "telegramButton": "Отримувати нагадування в Telegram",
+      "viberButton": "Отримувати нагадування в Viber"
+    }
+  },
+  "clientDetail": {
+    "backToClients": "← Клієнти",
+    "editButton": "Редагувати",
+    "saveButton": "Зберегти",
+    "cancelButton": "Скасувати",
+    "deleteButton": "Видалити клієнта",
+    "deleteConfirm": "Видалити цього клієнта? Цю дію неможливо скасувати.",
+    "fields": {
+      "name": "Ім'я",
+      "phone": "Телефон",
+      "email": "Email",
+      "birthday": "День народження",
+      "notes": "Примітки",
+      "notesPlaceholder": "Додати примітку…",
+      "tags": "Теги",
+      "tagsPlaceholder": "тег1, тег2…",
+      "whatsappNumber": "WhatsApp",
+      "messengers": "Месенджери",
+      "connected": "Підключено ✓",
+      "notConnected": "Не підключено"
+    },
+    "stats": {
+      "totalVisits": "Усього візитів",
+      "totalSpent": "Всього витрачено",
+      "lastVisit": "Останній візит",
+      "never": "Ніколи",
+      "clientSince": "Клієнт з"
+    },
+    "appointments": {
+      "heading": "Історія візитів",
+      "empty": "Ще немає візитів"
+    },
+    "status": {
+      "pending": "очікує",
+      "confirmed": "підтверджено",
+      "completed": "завершено",
+      "paid": "оплачено",
+      "cancelled": "скасовано",
+      "no_show": "не з'явився"
+    }
+  },
+  "transactions": {
+    "title": "Історія продажів",
+    "filters": {
+      "allMethods": "Усі способи",
+      "cash": "Готівка",
+      "card": "Картка",
+      "transfer": "Переказ",
+      "online": "Онлайн",
+      "from": "Від",
+      "to": "До"
+    },
+    "table": {
+      "receipt": "Чек",
+      "client": "Клієнт",
+      "employee": "Співробітник",
+      "items": "Послуги / Товари",
+      "method": "Спосіб",
+      "amount": "Сума",
+      "date": "Дата"
+    },
+    "walkIn": "Без запису",
+    "unassigned": "—",
+    "empty": "Ще немає продажів",
+    "total": "Разом за період:",
+    "itemCount": "{count} позиція",
+    "itemCountPlural": "{count} позицій",
+    "moreItems": "+ {count} ще"
+  },
+  "billing": {
+    "heading": "Ваш тариф",
+    "planSuffix": "тариф",
+    "freePlan": "Безкоштовний",
+    "activePlan": "Активний",
+    "renewsOn": "Продовжується",
+    "employees": "Співробітники",
+    "clients": "Клієнти",
+    "manageSubscription": "Керувати підпискою",
+    "mostPopular": "Найпопулярніший",
+    "upgrade": "Покращити →",
+    "currentPlan": "Поточний тариф",
+    "successMessage": "🎉 Підписку активовано! Дякуємо за оновлення.",
+    "errorMessage": "Щось пішло не так. Спробуйте ще раз або зверніться до підтримки."
+  },
+  "newClient": {
+    "title": "Новий клієнт",
+    "backToClients": "← Клієнти",
+    "fields": {
+      "name": "Повне ім'я *",
+      "namePlaceholder": "Олена Коваленко",
+      "phone": "Телефон",
+      "phonePlaceholder": "+380 99 123 4567",
+      "email": "Email",
+      "emailPlaceholder": "olena@example.com",
+      "whatsapp": "WhatsApp",
+      "whatsappPlaceholder": "+380991234567",
+      "birthday": "День народження",
+      "notes": "Примітки",
+      "notesPlaceholder": "Будь-які примітки…",
+      "tags": "Теги",
+      "tagsPlaceholder": "vip, постійний…"
+    },
+    "submitButton": "Додати клієнта",
+    "cancelButton": "Скасувати"
+  }
+}

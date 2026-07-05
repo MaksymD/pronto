@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils'
 
 const LOCALES = [
   { code: 'en', label: 'EN' },
+  { code: 'de', label: 'DE' },
+  { code: 'ua', label: 'UA' },
   { code: 'es', label: 'ES' },
   { code: 'pt', label: 'PT' },
 ]

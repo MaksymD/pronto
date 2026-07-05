@@ -22,17 +22,16 @@ export async function completeOnboarding(data: {
   if (!user) redirect('/login')
 
   const { data: business } = await supabase
-    .from('businesses')
-    .select('id, slug')
-    .eq('owner_id', user.id)
-    .maybeSingle()
+      .from('businesses')
+      .select('id, slug')
+      .eq('owner_id', user.id)
+      .maybeSingle()
 
   if (!business) redirect('/login')
 
   // Sanitize and validate text fields
   const bizName = data.bizName ? sanitize(data.bizName).slice(0, 100) : undefined
   const serviceName = sanitize(data.serviceName).slice(0, 100)
-  if (!serviceName) throw new Error('Service name is required')
 
   // Server-side slug validation (defence against bypassed client checks)
   const finalSlug = data.slug ?? business.slug
@@ -43,14 +42,14 @@ export async function completeOnboarding(data: {
   }
 
   const { error: updateError } = await supabase
-    .from('businesses')
-    .update({
-      ...(data.bizType ? { type: data.bizType } : {}),
-      ...(bizName ? { name: bizName } : {}),
-      ...(data.slug ? { slug: data.slug } : {}),
-      onboarding_completed: true,
-    })
-    .eq('id', business.id)
+      .from('businesses')
+      .update({
+        ...(data.bizType ? { type: data.bizType } : {}),
+        ...(bizName ? { name: bizName } : {}),
+        ...(data.slug ? { slug: data.slug } : {}),
+        onboarding_completed: true,
+      })
+      .eq('id', business.id)
 
   if (updateError) {
     // Most likely a unique constraint violation on slug

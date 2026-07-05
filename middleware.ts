@@ -22,22 +22,22 @@ export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request: { headers: requestHeaders } })
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+            supabaseResponse = NextResponse.next({ request: { headers: requestHeaders } })
+            cookiesToSet.forEach(({ name, value, options }) =>
+                supabaseResponse.cookies.set(name, value, options)
+            )
+          },
         },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({ request: { headers: requestHeaders } })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
+      }
   )
 
   // Handle Supabase email confirmation code on root path
@@ -79,7 +79,7 @@ export async function middleware(request: NextRequest) {
   if (!request.cookies.get('dashboard_locale')?.value) {
     const acceptLang = request.headers.get('accept-language') ?? ''
     const lang = acceptLang.toLowerCase()
-    const detected = lang.startsWith('pt') ? 'pt' : lang.startsWith('es') ? 'es' : null
+    const detected = lang.startsWith('pt') ? 'pt' : lang.startsWith('es') ? 'es' : lang.startsWith('de') ? 'de' : lang.startsWith('ua') ? 'ua' : lang.startsWith('en') ? 'en' : null
     if (detected) {
       supabaseResponse.cookies.set('dashboard_locale', detected, {
         path: '/',
