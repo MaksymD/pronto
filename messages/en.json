@@ -550,6 +550,12 @@
     "signOut": "Sign out"
   },
   "publicBooking": {
+    "badges": {
+      "service": "Select service",
+      "employee": "Choose specialist",
+      "datetime": "Date & time",
+      "contact": "Your details"
+    },
     "selectService": {
       "heading": "Select a service",
       "empty": "No services available for online booking.",
@@ -566,7 +572,12 @@
       "back": "← Back",
       "dateLabel": "Date",
       "timeLabel": "Time",
-      "continue": "Continue"
+      "continue": "Continue",
+      "slotTaken": "⚠ This time was just booked by someone else. Please choose a different time.",
+      "loading": "Loading available times…",
+      "dayClosed": "This day is outside working hours. Please choose another date.",
+      "noSlots": "No available times for this day. Please choose another date.",
+      "spotsLeft": "{count} spots left"
     },
     "contact": {
       "heading": "Your contact info",
@@ -579,12 +590,18 @@
       "emailPlaceholder": "you@example.com",
       "booking": "Confirming…",
       "confirm": "Confirm booking — {price}",
-      "noRegistration": "No registration required"
+      "noRegistration": "No registration required",
+      "errorContactRequired": "Please enter at least a phone number or email so we can confirm your booking.",
+      "errorPhoneInvalid": "Please enter a valid phone number (digits only, e.g. +1 234 567 8900).",
+      "errorEmailInvalid": "Please enter a valid email address (e.g. name@example.com).",
+      "errorTooMany": "Too many booking attempts. Please wait a few minutes and try again.",
+      "errorGeneric": "Something went wrong. Please try again or contact the business directly."
     },
     "success": {
       "heading": "Booking confirmed!",
       "body": "Your appointment is confirmed. See you soon!",
       "bookAnother": "Book another",
+      "addToCalendar": "Add to Google Calendar",
       "optInHeading": "Get reminders in your messenger",
       "optInSub": "Tap below to receive appointment reminders in Telegram or Viber — no registration needed.",
       "telegramButton": "Get reminders in Telegram",

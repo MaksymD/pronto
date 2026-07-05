@@ -514,6 +514,12 @@
     "signOut": "Abmelden"
   },
   "publicBooking": {
+    "badges": {
+      "service": "Dienstleistung wählen",
+      "employee": "Fachkraft wählen",
+      "datetime": "Datum & Uhrzeit",
+      "contact": "Ihre Angaben"
+    },
     "selectService": {
       "heading": "Dienstleistung auswählen",
       "empty": "Keine Dienstleistungen für die Online-Buchung verfügbar.",
@@ -530,7 +536,12 @@
       "back": "← Zurück",
       "dateLabel": "Datum",
       "timeLabel": "Uhrzeit",
-      "continue": "Weiter"
+      "continue": "Weiter",
+      "slotTaken": "⚠ Dieser Termin wurde gerade von jemand anderem gebucht. Bitte wählen Sie eine andere Uhrzeit.",
+      "loading": "Verfügbare Zeiten werden geladen…",
+      "dayClosed": "Dieser Tag liegt außerhalb der Öffnungszeiten. Bitte wählen Sie ein anderes Datum.",
+      "noSlots": "Keine verfügbaren Zeiten an diesem Tag. Bitte wählen Sie ein anderes Datum.",
+      "spotsLeft": "{count} Plätze frei"
     },
     "contact": {
       "heading": "Ihre Kontaktdaten",
@@ -543,12 +554,18 @@
       "emailPlaceholder": "sie@beispiel.de",
       "booking": "Wird bestätigt…",
       "confirm": "Termin bestätigen — {price}",
-      "noRegistration": "Keine Registrierung erforderlich"
+      "noRegistration": "Keine Registrierung erforderlich",
+      "errorContactRequired": "Bitte geben Sie mindestens eine Telefonnummer oder E-Mail-Adresse an, damit wir Ihre Buchung bestätigen können.",
+      "errorPhoneInvalid": "Bitte geben Sie eine gültige Telefonnummer ein (nur Ziffern, z. B. +49 123 4567890).",
+      "errorEmailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein (z. B. name@beispiel.de).",
+      "errorTooMany": "Zu viele Buchungsversuche. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder kontaktieren Sie das Unternehmen direkt."
     },
     "success": {
       "heading": "Termin bestätigt!",
       "body": "Ihr Termin ist bestätigt. Bis bald!",
       "bookAnother": "Weiteren Termin buchen",
+      "addToCalendar": "Zu Google Kalender hinzufügen",
       "optInHeading": "Erinnerungen in Ihrem Messenger erhalten",
       "optInSub": "Tippen Sie unten, um Terminerinnerungen per Telegram oder Viber zu erhalten — ohne Registrierung.",
       "telegramButton": "Erinnerungen per Telegram erhalten",

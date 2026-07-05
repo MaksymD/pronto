@@ -534,6 +534,12 @@
     "signOut": "Cerrar sesión"
   },
   "publicBooking": {
+    "badges": {
+      "service": "Seleccionar servicio",
+      "employee": "Elegir especialista",
+      "datetime": "Fecha y hora",
+      "contact": "Tus datos"
+    },
     "selectService": {
       "heading": "Selecciona un servicio",
       "empty": "No hay servicios disponibles para reservas online.",
@@ -550,7 +556,12 @@
       "back": "← Atrás",
       "dateLabel": "Fecha",
       "timeLabel": "Hora",
-      "continue": "Continuar"
+      "continue": "Continuar",
+      "slotTaken": "⚠ Este horario acaba de ser reservado por otra persona. Elige otro horario.",
+      "loading": "Cargando horarios disponibles…",
+      "dayClosed": "Este día está fuera del horario laboral. Elige otra fecha.",
+      "noSlots": "No hay horarios disponibles este día. Elige otra fecha.",
+      "spotsLeft": "{count} plazas disponibles"
     },
     "contact": {
       "heading": "Tus datos de contacto",
@@ -563,12 +574,18 @@
       "emailPlaceholder": "tu@ejemplo.com",
       "booking": "Confirmando…",
       "confirm": "Confirmar reserva — {price}",
-      "noRegistration": "Sin registro requerido"
+      "noRegistration": "Sin registro requerido",
+      "errorContactRequired": "Introduce al menos un teléfono o correo electrónico para poder confirmar tu reserva.",
+      "errorPhoneInvalid": "Introduce un número de teléfono válido (solo dígitos, p. ej. +52 55 1234 5678).",
+      "errorEmailInvalid": "Introduce una dirección de correo válida (p. ej. nombre@ejemplo.com).",
+      "errorTooMany": "Demasiados intentos de reserva. Espera unos minutos e inténtalo de nuevo.",
+      "errorGeneric": "Algo salió mal. Inténtalo de nuevo o contacta directamente con el negocio."
     },
     "success": {
       "heading": "¡Reserva confirmada!",
       "body": "Tu cita está confirmada. ¡Hasta pronto!",
       "bookAnother": "Reservar de nuevo",
+      "addToCalendar": "Añadir a Google Calendar",
       "optInHeading": "Recibe recordatorios en tu mensajero",
       "optInSub": "Toca abajo para recibir recordatorios de citas por Telegram o Viber — sin registro.",
       "telegramButton": "Recordatorios por Telegram",

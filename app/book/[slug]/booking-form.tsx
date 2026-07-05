@@ -212,15 +212,15 @@ export function PublicBookingForm({ business, services, employees, workingHours,
   async function submit() {
     if (!selectedService || !date || !time || !contact.name) return
     if (!contact.phone && !contact.email) {
-      setBookingError('Please enter at least a phone number or email so we can confirm your booking.')
+      setBookingError(t('contact.errorContactRequired'))
       return
     }
     if (contact.phone && !/^[\d\s\+\-\(\)\.]{7,}$/.test(contact.phone)) {
-      setBookingError('Please enter a valid phone number (digits only, e.g. +1 234 567 8900).')
+      setBookingError(t('contact.errorPhoneInvalid'))
       return
     }
     if (contact.email && !contact.email.includes('@')) {
-      setBookingError('Please enter a valid email address (e.g. name@example.com).')
+      setBookingError(t('contact.errorEmailInvalid'))
       return
     }
     setSaving(true)
@@ -254,7 +254,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
 
       if (res.status === 429) {
         setSaving(false)
-        setBookingError('Too many booking attempts. Please wait a few minutes and try again.')
+        setBookingError(t('contact.errorTooMany'))
         return
       }
 
@@ -267,7 +267,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       setSaving(false)
     } catch {
       setSaving(false)
-      setBookingError('Something went wrong. Please try again or contact the business directly.')
+      setBookingError(t('contact.errorGeneric'))
     }
   }
 
@@ -375,7 +375,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: 'white', border: '0.5px solid #E8E0D8', borderRadius: 10, padding: '11px 20px', fontSize: 14, color: '#2D2926', textDecoration: 'none', fontWeight: 500 }}
           >
             <CalendarPlus style={{ width: 16, height: 16 }} />
-            Add to Google Calendar
+            {t('success.addToCalendar')}
           </a>
           <button onClick={resetAll}
             style={{ background: 'white', border: '0.5px solid #E8E0D8', borderRadius: 10, padding: '11px 20px', fontSize: 14, color: '#2D2926', cursor: 'pointer', fontWeight: 500 }}>
@@ -392,7 +392,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       {/* ── Step 1: Service ───────────────────────────────────────────────── */}
       {step === 'service' && (
         <div>
-          <StepBadge label="Select service" />
+          <StepBadge label={t('badges.service')} />
           <SectionTitle text={t('selectService.heading')} />
           {services.length === 0 ? (
             <p style={{ fontSize: 14, color: '#9A8E85' }}>{t('selectService.empty')}</p>
@@ -417,7 +417,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       {step === 'employee' && selectedService && (
         <div>
           <BackLink label={t('selectEmployee.back')} onClick={handleBackFromEmployee} />
-          <StepBadge label="Choose specialist" />
+          <StepBadge label={t('badges.employee')} />
           <SectionTitle text={t('selectEmployee.heading')} />
           <p style={{ fontSize: 13, color: '#9A8E85', marginTop: -8, marginBottom: 14 }}>{selectedService.name}</p>
 
@@ -447,12 +447,12 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       {step === 'datetime' && selectedService && (
         <div>
           <BackLink label={t('datetime.back')} onClick={handleBackFromDatetime} />
-          <StepBadge label="Date & time" />
+          <StepBadge label={t('badges.datetime')} />
           <SectionTitle text={t('datetime.heading')} />
 
           {slotTakenError && (
             <div style={{ marginBottom: 16, padding: 12, background: '#FFF8ED', border: '0.5px solid #F5C842', borderRadius: 10, fontSize: 13, color: '#7A5C00' }}>
-              ⚠ This time was just booked by someone else. Please choose a different time.
+              {t('datetime.slotTaken')}
             </div>
           )}
 
@@ -478,15 +478,15 @@ export function PublicBookingForm({ business, services, employees, workingHours,
               {loadingSlots ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#9A8E85' }}>
                   <Loader2 style={{ width: 16, height: 16 }} className="animate-spin" />
-                  Loading available times&hellip;
+                  {t('datetime.loading')}
                 </div>
               ) : dayClosed ? (
                 <div style={{ padding: 12, background: '#F5F0EB', borderRadius: 10, fontSize: 14, color: '#9A8E85' }}>
-                  This day is outside working hours. Please choose another date.
+                  {t('datetime.dayClosed')}
                 </div>
               ) : availableSlots.length === 0 ? (
                 <div style={{ padding: 12, background: '#F5F0EB', borderRadius: 10, fontSize: 14, color: '#9A8E85' }}>
-                  No available times for this day. Please choose another date.
+                  {t('datetime.noSlots')}
                 </div>
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
@@ -511,7 +511,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
                         <div>{formatSlot(ts)}</div>
                         {isPartial && (
                           <div style={{ fontSize: 10, color: isSelected ? 'rgba(255,255,255,0.8)' : 'var(--brand)', marginTop: 2 }}>
-                            {spotsLeft} spots left
+                            {t('datetime.spotsLeft', { count: spotsLeft })}
                           </div>
                         )}
                       </button>
@@ -530,7 +530,7 @@ export function PublicBookingForm({ business, services, employees, workingHours,
       {step === 'contact' && (
         <div>
           <BackLink label={t('contact.back')} onClick={() => setStep('datetime')} />
-          <StepBadge label="Your details" />
+          <StepBadge label={t('badges.contact')} />
           <SectionTitle text={t('contact.heading')} />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
