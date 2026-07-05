@@ -258,6 +258,13 @@
       "cancelled": "abgesagt",
       "no_show": "nicht erschienen"
     },
+    "legend": {
+      "colorLegendTitle": "Farblegende",
+      "teamColors": "Teamfarben",
+      "noTeamMembers": "Noch keine Mitarbeiter",
+      "unassigned": "Nicht zugewiesen",
+      "appointmentStatus": "Terminstatus"
+    },
     "walkIn": "Ohne Termin",
     "form": {
       "heading": "Neuer Termin",

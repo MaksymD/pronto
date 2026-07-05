@@ -278,6 +278,13 @@
       "cancelled": "cancelado",
       "no_show": "não compareceu"
     },
+    "legend": {
+      "colorLegendTitle": "Legenda de cores",
+      "teamColors": "Cores da equipa",
+      "noTeamMembers": "Ainda não há membros na equipa",
+      "unassigned": "Não atribuído",
+      "appointmentStatus": "Estado del agendamento"
+    },
     "walkIn": "Sem agendamento",
     "form": {
       "heading": "Novo agendamento",

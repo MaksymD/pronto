@@ -258,6 +258,13 @@
       "cancelled": "cancelled",
       "no_show": "no show"
     },
+    "legend": {
+      "colorLegendTitle": "Color legend",
+      "teamColors": "Team colors",
+      "noTeamMembers": "No team members yet",
+      "unassigned": "Unassigned",
+      "appointmentStatus": "Appointment status"
+    },
     "walkIn": "Walk-in",
     "form": {
       "heading": "New booking",

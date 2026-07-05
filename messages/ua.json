@@ -258,6 +258,13 @@
       "cancelled": "скасовано",
       "no_show": "не з'явився"
     },
+    "legend": {
+      "colorLegendTitle": "Легенда кольорів",
+      "teamColors": "Кольори співробітників",
+      "noTeamMembers": "Ще немає співробітників",
+      "unassigned": "Не призначено",
+      "appointmentStatus": "Статус запису"
+    },
     "walkIn": "Без запису",
     "form": {
       "heading": "Новий запис",

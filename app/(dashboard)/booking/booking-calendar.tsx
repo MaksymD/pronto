@@ -470,46 +470,46 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
           {/* Legend button */}
           <div className="relative" ref={legendRef}>
             <button
-              onClick={() => setShowLegend((v) => !v)}
-              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
-              title="Color legend"
+                onClick={() => setShowLegend((v) => !v)}
+                className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
+                title={t('legend.colorLegendTitle')}
             >
               <Palette className="w-4 h-4" />
             </button>
             {showLegend && (
-              <div className="absolute right-0 top-8 z-30 w-56 bg-white rounded-xl border border-gray-200 shadow-lg p-3">
-                <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Team colors</div>
-                {employees.length === 0 ? (
-                  <p className="text-xs text-gray-400">No team members yet</p>
-                ) : (
-                  <div className="space-y-1.5 mb-3">
-                    {employees.map((emp) => {
-                      const c = getEmployeeColor(emp.id)
-                      return (
-                        <div key={emp.id} className="flex items-center gap-2">
-                          <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: c.bg, border: '1px solid rgba(0,0,0,0.1)' }} />
-                          <span className="text-xs text-gray-700 truncate">{emp.name}</span>
+                <div className="absolute right-0 top-8 z-30 w-56 bg-white rounded-xl border border-gray-200 shadow-lg p-3">
+                  <div className="text-xs font-semibold text-gray-500 uppercase mb-2">{t('legend.teamColors')}</div>
+                  {employees.length === 0 ? (
+                      <p className="text-xs text-gray-400">{t('legend.noTeamMembers')}</p>
+                  ) : (
+                      <div className="space-y-1.5 mb-3">
+                        {employees.map((emp) => {
+                          const c = getEmployeeColor(emp.id)
+                          return (
+                              <div key={emp.id} className="flex items-center gap-2">
+                                <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: c.bg, border: '1px solid rgba(0,0,0,0.1)' }} />
+                                <span className="text-xs text-gray-700 truncate">{emp.name}</span>
+                              </div>
+                          )
+                        })}
+                        <div className="flex items-center gap-2">
+                          <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: NO_EMPLOYEE_COLOR.bg, border: '1px solid rgba(0,0,0,0.1)' }} />
+                          <span className="text-xs text-gray-500 truncate">{t('legend.unassigned')}</span>
                         </div>
-                      )
-                    })}
-                    <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: NO_EMPLOYEE_COLOR.bg, border: '1px solid rgba(0,0,0,0.1)' }} />
-                      <span className="text-xs text-gray-500 truncate">Unassigned</span>
+                      </div>
+                  )}
+                  <div className="border-t border-gray-100 pt-2 mt-1">
+                    <div className="text-xs font-semibold text-gray-500 uppercase mb-2">{t('legend.appointmentStatus')}</div>
+                    <div className="space-y-1.5">
+                      {Object.entries(STATUS_STRIPE).map(([status, color]) => (
+                          <div key={status} className="flex items-center gap-2">
+                            <span className="w-1 h-4 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                            <span className="text-xs text-gray-700 capitalize">{t(('status.' + status) as any)}</span>
+                          </div>
+                      ))}
                     </div>
                   </div>
-                )}
-                <div className="border-t border-gray-100 pt-2 mt-1">
-                  <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Appointment status</div>
-                  <div className="space-y-1.5">
-                    {Object.entries(STATUS_STRIPE).map(([status, color]) => (
-                      <div key={status} className="flex items-center gap-2">
-                        <span className="w-1 h-4 rounded-full shrink-0" style={{ backgroundColor: color }} />
-                        <span className="text-xs text-gray-700 capitalize">{status.replace('_', ' ')}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
-              </div>
             )}
           </div>
           <Button size="sm" onClick={() => openForm()}>{t('newAppointment')}</Button>

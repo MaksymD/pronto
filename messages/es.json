@@ -278,6 +278,13 @@
       "cancelled": "cancelada",
       "no_show": "no se presentó"
     },
+    "legend": {
+      "colorLegendTitle": "Leyenda de colores",
+      "teamColors": "Colores del equipo",
+      "noTeamMembers": "Aún no hay miembros del equipo",
+      "unassigned": "Sin asignar",
+      "appointmentStatus": "Estado de la cita"
+    },
     "walkIn": "Sin cita",
     "form": {
       "heading": "Nueva reserva",
