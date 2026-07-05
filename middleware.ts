@@ -79,7 +79,7 @@ export async function middleware(request: NextRequest) {
   if (!request.cookies.get('dashboard_locale')?.value) {
     const acceptLang = request.headers.get('accept-language') ?? ''
     const lang = acceptLang.toLowerCase()
-    const detected = lang.startsWith('pt') ? 'pt' : lang.startsWith('es') ? 'es' : lang.startsWith('de') ? 'de' : lang.startsWith('ua') ? 'ua' : lang.startsWith('en') ? 'en' : null
+    const detected = lang.startsWith('es') ? 'es' : lang.startsWith('de') ? 'de' : lang.startsWith('ua') ? 'ua' : lang.startsWith('en') ? 'en' : null
     if (detected) {
       supabaseResponse.cookies.set('dashboard_locale', detected, {
         path: '/',

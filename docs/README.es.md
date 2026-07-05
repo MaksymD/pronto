@@ -1,4 +1,4 @@
-🌍 [English](../README.md) | **Español** | [Português](README.pt.md)
+🌍 [English](../README.md) | **Español** 
 
 # Pronto — Sistema de Gestión para Negocios de Servicios
 
@@ -422,7 +422,7 @@ Consulta [CONTRIBUTING.md](../CONTRIBUTING.md) para la configuración de desarro
 - PWA para clientes (historial de reservas, tarjeta de fidelidad)
 - Gestión de personal con nómina y comisiones
 - Insights empresariales con inteligencia artificial
-- Interfaz en múltiples idiomas (ES, RU, PT)
+- Interfaz en múltiples idiomas (ES, EN, DE, UA)
 
 ### 🌐 v2.0 — Q4 2026
 - Canales de mensajería adicionales

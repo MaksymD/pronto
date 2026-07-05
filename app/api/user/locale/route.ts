@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const SUPPORTED = ['en', 'es', 'pt', 'de', 'ua'] as const
+const SUPPORTED = ['en', 'es', 'de', 'ua'] as const
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}))

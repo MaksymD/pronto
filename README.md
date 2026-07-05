@@ -1,4 +1,4 @@
-🌍 **English** | [Español](docs/README.es.md) | [Português](docs/README.pt.md)
+🌍 **English** | [Español](docs/README.es.md)
 
 # Pronto — Open Source POS · CRM · Booking for Service Businesses
 
@@ -424,7 +424,7 @@ Pull requests are welcome! Please open an issue first to discuss major changes.
 - Client PWA (booking history, loyalty card)
 - Staff management with payroll & commissions
 - AI-powered business insights
-- Multi-language interface (ES, RU, PT)
+- Multi-language interface (ES, EN, DE, UA)
 
 ### 🌐 v2.0 — Q4 2026
 - Additional messenger channels
