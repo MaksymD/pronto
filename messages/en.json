@@ -595,7 +595,7 @@
       "errorPhoneInvalid": "Please enter a valid phone number (digits only, e.g. +1 234 567 8900).",
       "errorEmailInvalid": "Please enter a valid email address (e.g. name@example.com).",
       "errorTooMany": "Too many booking attempts. Please wait a few minutes and try again.",
-      "errorGeneric": "Something went wrong. Please try again or contact the business directly."
+      "errorGeneric": "Something went wrong. Please try again or contact with us directly."
     },
     "success": {
       "heading": "Booking confirmed!",

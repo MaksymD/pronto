@@ -559,7 +559,7 @@
       "errorPhoneInvalid": "Bitte geben Sie eine gültige Telefonnummer ein (nur Ziffern, z. B. +49 123 4567890).",
       "errorEmailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein (z. B. name@beispiel.de).",
       "errorTooMany": "Zu viele Buchungsversuche. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
-      "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder kontaktieren Sie das Unternehmen direkt."
+      "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder kontaktieren Sie mit uns direkt."
     },
     "success": {
       "heading": "Termin bestätigt!",

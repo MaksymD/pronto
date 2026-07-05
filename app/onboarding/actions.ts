@@ -2,10 +2,10 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import DOMPurify from 'isomorphic-dompurify'
+import { stripHtml } from '@/lib/sanitize'
 
 function sanitize(s: string): string {
-  return DOMPurify.sanitize(s, { ALLOWED_TAGS: [] }).trim()
+  return stripHtml(s)
 }
 
 export async function completeOnboarding(data: {
