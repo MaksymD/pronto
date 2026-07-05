@@ -659,7 +659,6 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                                       onChange={(e) => setHour12(e.target.value)}
                                       className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                   >
-                                    <option value="">hh</option>
                                     {hours12.map((h) => <option key={h} value={h}>{h}</option>)}
                                   </select>
                                   <select
@@ -685,7 +684,6 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                                       onChange={(e) => setForm((f) => ({ ...f, hour: e.target.value }))}
                                       className="w-20 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                   >
-                                    <option value="">hh</option>
                                     {hours24.map((h) => <option key={h} value={h}>{h}</option>)}
                                   </select>
                                   <select

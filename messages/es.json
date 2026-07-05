@@ -625,7 +625,12 @@
       "transfer": "Transferencia",
       "online": "Online",
       "from": "Desde",
-      "to": "Hasta"
+      "to": "Hasta",
+      "client": "Cliente",
+      "clientPlaceholder": "Nombre del cliente…",
+      "method": "Método",
+      "apply": "Aplicar",
+      "clear": "Limpiar"
     },
     "table": {
       "receipt": "Recibo",

@@ -605,7 +605,12 @@
       "transfer": "Überweisung",
       "online": "Online",
       "from": "Von",
-      "to": "Bis"
+      "to": "Bis",
+      "client": "Kunde",
+      "clientPlaceholder": "Name des Kunden…",
+      "method": "Methode",
+      "apply": "Anwenden",
+      "clear": "Zurücksetzen"
     },
     "table": {
       "receipt": "Beleg",

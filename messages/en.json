@@ -641,7 +641,12 @@
       "transfer": "Transfer",
       "online": "Online",
       "from": "From",
-      "to": "To"
+      "to": "To",
+      "client": "Client",
+      "clientPlaceholder": "Client name…",
+      "method": "Method",
+      "apply": "Apply",
+      "clear": "Clear"
     },
     "table": {
       "receipt": "Receipt",
