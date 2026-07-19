@@ -319,7 +319,17 @@
       "statusLabel": "Status",
       "employeeLabel": "Employee:",
       "chargeButton": "Charge",
-      "close": "Close"
+      "close": "Close",
+      "rescheduleButton": "Change date & time",
+      "rescheduleLabel": "New date & time",
+      "rescheduleContinue": "Continue",
+      "rescheduleConfirm": "Move this appointment to {date} at {time}?",
+      "rescheduleYes": "Yes, move it",
+      "rescheduleNo": "Cancel",
+      "rescheduleErrorPast": "Cannot move to a time in the past.",
+      "rescheduleErrorClosed": "This day is closed in your business hours.",
+      "rescheduleErrorConflict": "This time is already booked. Please choose another time.",
+      "rescheduleErrorGeneric": "Failed to reschedule. Please try again."
     }
   },
   "settings": {

@@ -291,7 +291,17 @@
       "statusLabel": "Статус",
       "employeeLabel": "Співробітник:",
       "chargeButton": "Оплатити",
-      "close": "Закрити"
+      "close": "Закрити",
+      "rescheduleButton": "Змінити дату й час",
+      "rescheduleLabel": "Нова дата й час",
+      "rescheduleContinue": "Далі",
+      "rescheduleConfirm": "Перенести цей запис на {date} о {time}?",
+      "rescheduleYes": "Так, перенести",
+      "rescheduleNo": "Скасувати",
+      "rescheduleErrorPast": "Не можна перенести на час у минулому.",
+      "rescheduleErrorClosed": "Цей день позначено як вихідний у робочому графіку.",
+      "rescheduleErrorConflict": "Цей час вже зайнято. Будь ласка, оберіть інший час.",
+      "rescheduleErrorGeneric": "Не вдалося перенести запис. Спробуйте ще раз."
     }
   },
   "settings": {

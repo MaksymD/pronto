@@ -311,7 +311,17 @@
       "statusLabel": "Estado",
       "employeeLabel": "Empleado:",
       "chargeButton": "Cobrar",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "rescheduleButton": "Cambiar fecha y hora",
+      "rescheduleLabel": "Nueva fecha y hora",
+      "rescheduleContinue": "Continuar",
+      "rescheduleConfirm": "¿Mover esta cita al {date} a las {time}?",
+      "rescheduleYes": "Sí, moverla",
+      "rescheduleNo": "Cancelar",
+      "rescheduleErrorPast": "No se puede mover a una hora pasada.",
+      "rescheduleErrorClosed": "Este día está cerrado según su horario laboral.",
+      "rescheduleErrorConflict": "Este horario ya está reservado. Elige otro horario.",
+      "rescheduleErrorGeneric": "No se pudo reprogramar. Inténtalo de nuevo."
     }
   },
   "settings": {

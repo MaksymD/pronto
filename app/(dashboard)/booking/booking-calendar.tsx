@@ -5,21 +5,10 @@ import { createClient } from '@/lib/supabase/client'
 import { formatInBusinessTimezone } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
-import { ChevronLeft, ChevronRight, ExternalLink, CreditCard, AlertCircle, Palette } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink, CreditCard, AlertCircle, Palette, CalendarClock } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import {
-  DndContext,
-  DragEndEvent,
-  DragOverlay,
-  DragStartEvent,
-  PointerSensor,
-  useDraggable,
-  useDroppable,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core'
 
 interface Appointment {
   id: string; starts_at: string; ends_at: string; status: string; source: string | null; notes: string | null
@@ -28,14 +17,14 @@ interface Appointment {
   services: { id: string; name: string; price: number } | null
 }
 
-/** Get year/month/day/hour of a UTC ISO timestamp in the given IANA timezone. */
-function apptTzParts(iso: string, tz: string): { year: number; month: number; day: number; hour: number } {
+/** Get year/month/day/hour/minute of a UTC ISO timestamp in the given IANA timezone. */
+function apptTzParts(iso: string, tz: string): { year: number; month: number; day: number; hour: number; minute: number } {
   const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: tz,
-    year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', hour12: false,
+    year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false,
   }).formatToParts(new Date(iso))
   const get = (type: string) => parseInt(parts.find((p) => p.type === type)?.value ?? '0')
-  return { year: get('year'), month: get('month'), day: get('day'), hour: get('hour') % 24 }
+  return { year: get('year'), month: get('month'), day: get('day'), hour: get('hour') % 24, minute: get('minute') }
 }
 
 /** Convert a wall-clock date+time in the business timezone to a UTC Date. */
@@ -107,39 +96,6 @@ interface Props {
   timeFormat?: string
 }
 
-// ─── Draggable appointment card ────────────────────────────────────────────────
-function DraggableAppt({ id, children }: { id: string; children: React.ReactNode }) {
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id })
-  return (
-      <div
-          ref={setNodeRef}
-          style={{ opacity: isDragging ? 0.35 : 1, touchAction: 'none' }}
-          {...attributes}
-          {...listeners}
-      >
-        {children}
-      </div>
-  )
-}
-
-// ─── Droppable time-slot cell ──────────────────────────────────────────────────
-function DroppableCell({
-                         id, children, onClick, className,
-                       }: {
-  id: string; children: React.ReactNode; onClick: () => void; className: string
-}) {
-  const { isOver, setNodeRef } = useDroppable({ id })
-  return (
-      <td
-          ref={setNodeRef}
-          className={`${className}${isOver ? ' bg-blue-50' : ''}`}
-          onClick={onClick}
-      >
-        {children}
-      </td>
-  )
-}
-
 const statusColors: Record<string, string> = {
   pending: 'bg-yellow-100 border-yellow-300 text-yellow-800',
   confirmed: 'bg-blue-100 border-blue-300 text-blue-800',
@@ -184,7 +140,6 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
     let maxHour = openDays.length > 0
         ? Math.max(...openDays.map((h) => parseInt(h.close_time.split(':')[0])))
         : 20
-    // Expand to cover any appointment that falls outside the business-hours window
     for (const appt of appointments) {
       const { hour: h } = apptTzParts(appt.starts_at, timezone)
       if (h < minHour) minHour = h
@@ -198,7 +153,6 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
   const bookingLimitReached = plan === 'free' && bookingCount >= (bookingLimit ?? Infinity)
   const is12h = timeFormat === '12h'
 
-  // hour/minute always stored in 24h internally; period only used when is12h
   const [form, setForm] = useState({ client_id: '', employee_id: '', service_id: '', date: '', hour: '', minute: '00', period: 'AM' as 'AM' | 'PM', notes: '' })
 
   async function openForm(prefill?: Partial<typeof form>) {
@@ -242,10 +196,132 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
   const [saving, setSaving] = useState(false)
   const [selectedAppt, setSelectedAppt] = useState<Appointment | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
-  const [draggedAppt, setDraggedAppt] = useState<Appointment | null>(null)
   const [assignError, setAssignError] = useState<string | null>(null)
   const [showLegend, setShowLegend] = useState(false)
   const legendRef = useRef<HTMLDivElement>(null)
+
+  // ── Reschedule (change date/time from within the opened appointment) ──────
+  const [rescheduling, setRescheduling] = useState(false)
+  const [rescheduleDate, setRescheduleDate] = useState('')
+  const [rescheduleHour, setRescheduleHour] = useState('')
+  const [rescheduleMinute, setRescheduleMinute] = useState('00')
+  const [reschedulePeriod, setReschedulePeriod] = useState<'AM' | 'PM'>('AM')
+  const [rescheduleError, setRescheduleError] = useState<string | null>(null)
+  const [rescheduleSaving, setRescheduleSaving] = useState(false)
+  const [confirmReschedule, setConfirmReschedule] = useState(false)
+  const rescheduleFormTime = rescheduleHour ? `${rescheduleHour}:${rescheduleMinute}` : ''
+
+  function setRescheduleHour12(h12: string) {
+    setRescheduleHour(to24h(h12, reschedulePeriod))
+  }
+
+  function setReschedulePeriodValue(period: 'AM' | 'PM') {
+    setReschedulePeriod(period)
+    setRescheduleHour((h) => h ? to24h(to12hDisplay(h), period) : '')
+  }
+
+  function openReschedule() {
+    if (!selectedAppt) return
+    const p = apptTzParts(selectedAppt.starts_at, timezone)
+    setRescheduleDate(`${p.year}-${String(p.month).padStart(2, '0')}-${String(p.day).padStart(2, '0')}`)
+    setRescheduleHour(String(p.hour).padStart(2, '0'))
+    setRescheduleMinute(String(p.minute).padStart(2, '0'))
+    setReschedulePeriod(p.hour < 12 ? 'AM' : 'PM')
+    setRescheduleError(null)
+    setConfirmReschedule(false)
+    setRescheduling(true)
+  }
+
+  function cancelReschedule() {
+    setRescheduling(false)
+    setConfirmReschedule(false)
+    setRescheduleError(null)
+  }
+
+  async function checkRescheduleConflict(newStartsAt: Date, newEndsAt: Date): Promise<boolean> {
+    if (!selectedAppt) return true
+    let query = supabase
+        .from('appointments')
+        .select('id')
+        .eq('business_id', businessId)
+        .neq('id', selectedAppt.id)
+        .neq('status', 'cancelled')
+        .lt('starts_at', newEndsAt.toISOString())
+        .gt('ends_at', newStartsAt.toISOString())
+    if (selectedAppt.employees?.id) {
+      query = query.eq('employee_id', selectedAppt.employees.id)
+    }
+    const { data } = await query
+    return (data?.length ?? 0) > 0
+  }
+
+  async function proposeReschedule() {
+    if (!selectedAppt || !rescheduleDate || !rescheduleFormTime) return
+    setRescheduleError(null)
+    const [ry, rm, rd] = rescheduleDate.split('-').map(Number)
+    const [rh, rmin] = rescheduleFormTime.split(':').map(Number)
+    const newStartsAt = wallclockToUtc(ry, rm, rd, rh, rmin, timezone)
+
+    if (newStartsAt < new Date()) {
+      setRescheduleError(t('detail.rescheduleErrorPast'))
+      return
+    }
+    if (isDayClosed(newStartsAt)) {
+      setRescheduleError(t('detail.rescheduleErrorClosed'))
+      return
+    }
+
+    const duration = new Date(selectedAppt.ends_at).getTime() - new Date(selectedAppt.starts_at).getTime()
+    const newEndsAt = new Date(newStartsAt.getTime() + duration)
+
+    setRescheduleSaving(true)
+    const hasConflict = await checkRescheduleConflict(newStartsAt, newEndsAt)
+    setRescheduleSaving(false)
+
+    if (hasConflict) {
+      setRescheduleError(t('detail.rescheduleErrorConflict'))
+      return
+    }
+    setConfirmReschedule(true)
+  }
+
+  async function confirmRescheduleAppointment() {
+    if (!selectedAppt) return
+    setRescheduleSaving(true)
+    const [ry, rm, rd] = rescheduleDate.split('-').map(Number)
+    const [rh, rmin] = rescheduleFormTime.split(':').map(Number)
+    const newStartsAt = wallclockToUtc(ry, rm, rd, rh, rmin, timezone)
+    const duration = new Date(selectedAppt.ends_at).getTime() - new Date(selectedAppt.starts_at).getTime()
+    const newEndsAt = new Date(newStartsAt.getTime() + duration)
+    const oldStartsAt = selectedAppt.starts_at
+    const apptId = selectedAppt.id
+
+    const { error } = await supabase.from('appointments').update({
+      starts_at: newStartsAt.toISOString(),
+      ends_at: newEndsAt.toISOString(),
+    }).eq('id', apptId)
+
+    if (!error) {
+      setAppointments((prev) => prev.map((a) =>
+          a.id === apptId ? { ...a, starts_at: newStartsAt.toISOString(), ends_at: newEndsAt.toISOString() } : a
+      ))
+      setSelectedAppt((a) => a && a.id === apptId
+          ? { ...a, starts_at: newStartsAt.toISOString(), ends_at: newEndsAt.toISOString() }
+          : a
+      )
+      setRescheduling(false)
+      setConfirmReschedule(false)
+      fetch('/api/email/reschedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ appointmentId: apptId, oldStartsAt }),
+      }).catch(() => {/* non-critical */})
+      router.refresh()
+    } else {
+      setRescheduleError(t('detail.rescheduleErrorGeneric'))
+    }
+    setRescheduleSaving(false)
+  }
 
   // day_of_week: 0=Sun, 1=Mon … 6=Sat (JS getDay() convention)
   function isDayClosed(date: Date) {
@@ -265,65 +341,6 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
     const [ch, cm] = rule.close_time.split(':').map(Number)
     const timeMin = hh * 60 + mm
     return timeMin < oh * 60 + om || timeMin >= ch * 60 + cm
-  }
-
-  // Require 5px movement before treating pointer-down as a drag (preserves click)
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
-
-  function handleDragStart(event: DragStartEvent) {
-    const appt = appointments.find((a) => a.id === event.active.id)
-    setDraggedAppt(appt ?? null)
-  }
-
-  async function handleDragEnd(event: DragEndEvent) {
-    setDraggedAppt(null)
-    const { active, over } = event
-    if (!over) return
-
-    const apptId = active.id as string
-    const [dayIndexStr, hourStr] = (over.id as string).split('-')
-    const dayIndex = parseInt(dayIndexStr)
-    const hour = parseInt(hourStr)
-
-    const appt = appointments.find((a) => a.id === apptId)
-    if (!appt) return
-
-    // Skip if dropped on the same slot (compare in business timezone)
-    const p = apptTzParts(appt.starts_at, timezone)
-    const sameDay = weekDates[dayIndex]
-    if (
-        p.hour === hour &&
-        p.year === sameDay.getFullYear() &&
-        p.month === sameDay.getMonth() + 1 &&
-        p.day === sameDay.getDate()
-    ) return
-
-    // Build the new UTC timestamp from the business-timezone wall-clock time
-    const newStartsAt = wallclockToUtc(
-        sameDay.getFullYear(), sameDay.getMonth() + 1, sameDay.getDate(),
-        hour, 0, timezone
-    )
-
-    // Prevent dropping in the past or on a closed day
-    if (newStartsAt < new Date()) return
-    if (isDayClosed(newStartsAt)) return
-
-    const duration = new Date(appt.ends_at).getTime() - new Date(appt.starts_at).getTime()
-    const newEndsAt = new Date(newStartsAt.getTime() + duration)
-
-    // Optimistic update
-    setAppointments((prev) =>
-        prev.map((a) =>
-            a.id === apptId
-                ? { ...a, starts_at: newStartsAt.toISOString(), ends_at: newEndsAt.toISOString() }
-                : a
-        )
-    )
-
-    await supabase.from('appointments').update({
-      starts_at: newStartsAt.toISOString(),
-      ends_at: newEndsAt.toISOString(),
-    }).eq('id', apptId)
   }
 
   const days = t.raw('calendar.days') as string[]
@@ -531,97 +548,76 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
           </div>
         </div>
 
-        {/* Calendar grid */}
-        <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <div className="bg-white rounded-xl border border-gray-200 overflow-auto flex-1">
-            <table className="w-full text-xs border-collapse min-w-[700px]">
-              <thead>
-              <tr>
-                <th className="sticky top-0 z-10 w-14 border-b border-r border-gray-100 py-2 text-gray-400 font-normal bg-white" />
-                {weekDates.map((d, i) => {
-                  const isToday = d.toDateString() === new Date().toDateString()
-                  return (
-                      <th key={i} className={`sticky top-0 z-10 border-b border-r border-gray-100 py-2 font-medium text-center ${isToday ? 'bg-blue-50 text-blue-700' : 'text-gray-600 bg-white'}`}>
-                        <div>{days[i]}</div>
-                        <div className={`text-lg font-bold ${isToday ? 'text-blue-600' : 'text-gray-900'}`}>{d.getDate()}</div>
-                      </th>
-                  )
-                })}
-              </tr>
-              </thead>
-              <tbody>
-              {HOURS.map((hour) => (
-                  <tr key={hour} className="h-14">
-                    <td className="border-r border-b border-gray-100 text-right pr-2 text-gray-400 text-xs align-top pt-1 w-14">{hour}:00</td>
-                    {weekDates.map((_, di) => {
-                      const cellAppts = getApptForCell(di, hour)
-                      return (
-                          <DroppableCell
-                              key={di}
-                              id={`${di}-${hour}`}
-                              className="border-r border-b border-gray-100 align-top p-0.5 hover:bg-gray-50 cursor-pointer"
-                              onClick={() => {
-                                if (cellAppts.length === 0) {
-                                  const d = weekDates[di]
-                                  const yyyy = d.getFullYear()
-                                  const mm = String(d.getMonth() + 1).padStart(2, '0')
-                                  const dd = String(d.getDate()).padStart(2, '0')
-                                  const hh = String(hour).padStart(2, '0')
-                                  openForm({ date: `${yyyy}-${mm}-${dd}`, hour: hh, minute: '00', period: parseInt(hh) < 12 ? 'AM' : 'PM' })
-                                }
-                              }}
-                          >
-                            {cellAppts.map((a) => {
-                              const empColor = getEmployeeColor(a.employees?.id)
-                              const stripe = getStatusStripe(a.status)
-                              return (
-                                  <DraggableAppt key={a.id} id={a.id}>
-                                    <div
-                                        onClick={(e) => { e.stopPropagation(); setSelectedAppt(a) }}
-                                        className="rounded px-1 py-0.5 mb-0.5 cursor-grab active:cursor-grabbing text-xs"
-                                        style={{ backgroundColor: empColor.bg, color: empColor.text, borderLeft: `5px solid ${stripe}`, borderTop: '1px solid rgba(0,0,0,0.08)', borderRight: '1px solid rgba(0,0,0,0.08)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}
-                                    >
-                                      <div className="font-semibold truncate">{a.clients?.name ?? (a.source === 'online' ? 'Online' : t('walkIn'))}</div>
-                                      <div className="truncate">{a.services?.name} · {formatInBusinessTimezone(a.starts_at, timezone, 'time', 'en-US', is12h)}</div>
-                                      {a.employees?.name && (
-                                          <div className="truncate text-[10px] opacity-70">{a.employees.name}</div>
-                                      )}
-                                      {a.source && SOURCE_BADGE[a.source] && (
-                                          <span className={`inline-block mt-0.5 text-[9px] leading-tight px-1 rounded font-medium ${SOURCE_BADGE[a.source].pill}`}>
-                                    {SOURCE_BADGE[a.source].label}
-                                  </span>
-                                      )}
-                                    </div>
-                                  </DraggableAppt>
-                              )
-                            })}
-                          </DroppableCell>
-                      )
-                    })}
-                  </tr>
-              ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Drag overlay — shown while dragging */}
-          <DragOverlay>
-            {draggedAppt && (() => {
-              const empColor = getEmployeeColor(draggedAppt.employees?.id)
-              const stripe = getStatusStripe(draggedAppt.status)
-              return (
-                  <div className="rounded px-2 py-1 text-xs shadow-lg w-28"
-                       style={{ backgroundColor: empColor.bg, color: empColor.text, borderLeft: `5px solid ${stripe}`, borderTop: '1px solid rgba(0,0,0,0.08)', borderRight: '1px solid rgba(0,0,0,0.08)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-                    <div className="font-semibold truncate">{draggedAppt.clients?.name ?? (draggedAppt.source === 'online' ? 'Online' : t('walkIn'))}</div>
-                    <div className="truncate">{draggedAppt.services?.name}</div>
-                    {draggedAppt.employees?.name && (
-                        <div className="truncate opacity-70">{draggedAppt.employees.name}</div>
-                    )}
-                  </div>
-              )
-            })()}
-          </DragOverlay>
-        </DndContext>
+        {/* Calendar grid — read-only, no drag-and-drop. Rescheduling happens only
+          via the appointment detail modal (with a confirmation step). */}
+        <div className="bg-white rounded-xl border border-gray-200 overflow-auto flex-1">
+          <table className="w-full text-xs border-collapse min-w-[700px]">
+            <thead>
+            <tr>
+              <th className="sticky top-0 z-10 w-14 border-b border-r border-gray-100 py-2 text-gray-400 font-normal bg-white" />
+              {weekDates.map((d, i) => {
+                const isToday = d.toDateString() === new Date().toDateString()
+                return (
+                    <th key={i} className={`sticky top-0 z-10 border-b border-r border-gray-100 py-2 font-medium text-center ${isToday ? 'bg-blue-50 text-blue-700' : 'text-gray-600 bg-white'}`}>
+                      <div>{days[i]}</div>
+                      <div className={`text-lg font-bold ${isToday ? 'text-blue-600' : 'text-gray-900'}`}>{d.getDate()}</div>
+                    </th>
+                )
+              })}
+            </tr>
+            </thead>
+            <tbody>
+            {HOURS.map((hour) => (
+                <tr key={hour} className="h-14">
+                  <td className="border-r border-b border-gray-100 text-right pr-2 text-gray-400 text-xs align-top pt-1 w-14">{hour}:00</td>
+                  {weekDates.map((_, di) => {
+                    const cellAppts = getApptForCell(di, hour)
+                    return (
+                        <td
+                            key={di}
+                            className="border-r border-b border-gray-100 align-top p-0.5 hover:bg-gray-50 cursor-pointer"
+                            onClick={() => {
+                              if (cellAppts.length === 0) {
+                                const d = weekDates[di]
+                                const yyyy = d.getFullYear()
+                                const mm = String(d.getMonth() + 1).padStart(2, '0')
+                                const dd = String(d.getDate()).padStart(2, '0')
+                                const hh = String(hour).padStart(2, '0')
+                                openForm({ date: `${yyyy}-${mm}-${dd}`, hour: hh, minute: '00', period: parseInt(hh) < 12 ? 'AM' : 'PM' })
+                              }
+                            }}
+                        >
+                          {cellAppts.map((a) => {
+                            const empColor = getEmployeeColor(a.employees?.id)
+                            const stripe = getStatusStripe(a.status)
+                            return (
+                                <div
+                                    key={a.id}
+                                    onClick={(e) => { e.stopPropagation(); setSelectedAppt(a) }}
+                                    className="rounded px-1 py-0.5 mb-0.5 cursor-pointer text-xs"
+                                    style={{ backgroundColor: empColor.bg, color: empColor.text, borderLeft: `5px solid ${stripe}`, borderTop: '1px solid rgba(0,0,0,0.08)', borderRight: '1px solid rgba(0,0,0,0.08)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}
+                                >
+                                  <div className="font-semibold truncate">{a.clients?.name ?? (a.source === 'online' ? 'Online' : t('walkIn'))}</div>
+                                  <div className="truncate">{a.services?.name} · {formatInBusinessTimezone(a.starts_at, timezone, 'time', 'en-US', is12h)}</div>
+                                  {a.employees?.name && (
+                                      <div className="truncate text-[10px] opacity-70">{a.employees.name}</div>
+                                  )}
+                                  {a.source && SOURCE_BADGE[a.source] && (
+                                      <span className={`inline-block mt-0.5 text-[9px] leading-tight px-1 rounded font-medium ${SOURCE_BADGE[a.source].pill}`}>
+                                {SOURCE_BADGE[a.source].label}
+                              </span>
+                                  )}
+                                </div>
+                            )
+                          })}
+                        </td>
+                    )
+                  })}
+                </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>
 
         {/* New appointment modal */}
         {showForm && (
@@ -674,6 +670,7 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                                       onChange={(e) => setHour12(e.target.value)}
                                       className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                   >
+                                    <option value="">hh</option>
                                     {hours12.map((h) => <option key={h} value={h}>{h}</option>)}
                                   </select>
                                   <select
@@ -699,6 +696,7 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                                       onChange={(e) => setForm((f) => ({ ...f, hour: e.target.value }))}
                                       className="w-20 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                   >
+                                    <option value="">hh</option>
                                     {hours24.map((h) => <option key={h} value={h}>{h}</option>)}
                                   </select>
                                   <select
@@ -774,6 +772,128 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                 </span>
                   )}
                 </div>
+
+                {/* Reschedule — only reachable from within this opened appointment */}
+                {!rescheduling ? (
+                    <button
+                        type="button"
+                        onClick={openReschedule}
+                        className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 mb-4 rounded-lg border border-gray-200 text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors"
+                    >
+                      <CalendarClock className="w-3.5 h-3.5" />
+                      {t('detail.rescheduleButton')}
+                    </button>
+                ) : (
+                    <div className="mb-4 rounded-xl border border-gray-200 p-3">
+                      {!confirmReschedule ? (
+                          <>
+                            <label className="text-xs text-gray-500 font-medium">{t('detail.rescheduleLabel')}</label>
+                            <div className="flex gap-2 mt-1">
+                              <DatePicker
+                                  value={rescheduleDate}
+                                  onChange={setRescheduleDate}
+                                  className="flex-1"
+                              />
+                              {is12h ? (
+                                  <>
+                                    <select
+                                        value={rescheduleHour ? to12hDisplay(rescheduleHour) : ''}
+                                        onChange={(e) => setRescheduleHour12(e.target.value)}
+                                        className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                      <option value="">hh</option>
+                                      {hours12.map((h) => <option key={h} value={h}>{h}</option>)}
+                                    </select>
+                                    <select
+                                        value={rescheduleMinute}
+                                        onChange={(e) => setRescheduleMinute(e.target.value)}
+                                        className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                      {minutes.map((m) => <option key={m} value={m}>{m}</option>)}
+                                    </select>
+                                    <select
+                                        value={reschedulePeriod}
+                                        onChange={(e) => setReschedulePeriodValue(e.target.value as 'AM' | 'PM')}
+                                        className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                      <option value="AM">AM</option>
+                                      <option value="PM">PM</option>
+                                    </select>
+                                  </>
+                              ) : (
+                                  <>
+                                    <select
+                                        value={rescheduleHour}
+                                        onChange={(e) => setRescheduleHour(e.target.value)}
+                                        className="w-20 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                      <option value="">hh</option>
+                                      {hours24.map((h) => <option key={h} value={h}>{h}</option>)}
+                                    </select>
+                                    <select
+                                        value={rescheduleMinute}
+                                        onChange={(e) => setRescheduleMinute(e.target.value)}
+                                        className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                      {minutes.map((m) => <option key={m} value={m}>{m}</option>)}
+                                    </select>
+                                  </>
+                              )}
+                            </div>
+                            {rescheduleError && (
+                                <p className="mt-2 text-xs text-red-600">{rescheduleError}</p>
+                            )}
+                            <div className="flex gap-2 mt-3">
+                              <Button variant="outline" size="sm" className="flex-1" onClick={cancelReschedule}>
+                                {t('form.cancel')}
+                              </Button>
+                              <Button
+                                  size="sm"
+                                  className="flex-1"
+                                  onClick={proposeReschedule}
+                                  disabled={rescheduleSaving || !rescheduleDate || !rescheduleHour}
+                              >
+                                {rescheduleSaving ? t('form.saving') : t('detail.rescheduleContinue')}
+                              </Button>
+                            </div>
+                          </>
+                      ) : (
+                          <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
+                            <p className="text-sm text-blue-900 font-medium mb-2">
+                              {t('detail.rescheduleConfirm', {
+                                date: rescheduleDate,
+                                time: is12h
+                                    ? `${to12hDisplay(rescheduleHour)}:${rescheduleMinute} ${reschedulePeriod}`
+                                    : `${rescheduleHour}:${rescheduleMinute}`,
+                              })}
+                            </p>
+                            {rescheduleError && (
+                                <p className="mb-2 text-xs text-red-600">{rescheduleError}</p>
+                            )}
+                            <div className="flex gap-2">
+                              <Button
+                                  size="sm"
+                                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                                  onClick={confirmRescheduleAppointment}
+                                  disabled={rescheduleSaving}
+                              >
+                                {rescheduleSaving ? t('form.saving') : t('detail.rescheduleYes')}
+                              </Button>
+                              <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex-1"
+                                  onClick={() => setConfirmReschedule(false)}
+                                  disabled={rescheduleSaving}
+                              >
+                                {t('detail.rescheduleNo')}
+                              </Button>
+                            </div>
+                          </div>
+                      )}
+                    </div>
+                )}
+
                 {employees.length > 0 && (
                     <div className="mb-4">
                       <label className="text-xs text-gray-400 uppercase font-medium">{t('detail.employeeLabel')}</label>
@@ -849,7 +969,7 @@ export function BookingCalendar({ businessId, slug, timezone, appointments: init
                       {t('deleteAppointment')}
                     </Button>
                 )}
-                <Button variant="outline" className="w-full" onClick={() => { setSelectedAppt(null); setConfirmDelete(false); setAssignError(null) }}>{t('detail.close')}</Button>
+                <Button variant="outline" className="w-full" onClick={() => { setSelectedAppt(null); setConfirmDelete(false); setAssignError(null); cancelReschedule() }}>{t('detail.close')}</Button>
               </div>
             </div>
         )}

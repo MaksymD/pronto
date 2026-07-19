@@ -277,6 +277,36 @@ export async function sendBookingConfirmation(opts: {
   })
 }
 
+// ─── Booking reschedule ─────────────────────────────────────────────────────
+
+export async function sendBookingReschedule(opts: {
+  to: string
+  clientName: string
+  businessName: string
+  serviceName: string
+  newDate: string
+  newTime: string
+  employeeName?: string
+}) {
+  const body = `
+    ${h1('Booking rescheduled')}
+    ${p(`Hi ${firstName(opts.clientName)}, your appointment has been moved to a new time.`)}
+    ${info([
+    ['Service', opts.serviceName],
+    ['New date', opts.newDate],
+    ['New time', opts.newTime],
+    ...(opts.employeeName ? [['Employee', opts.employeeName] as [string, string]] : []),
+  ])}
+    ${p(`See you then — ${opts.businessName}`)}
+  `
+  return sendMail({
+    from: getFromAddress(opts.businessName),
+    to: opts.to,
+    subject: `Booking rescheduled — ${opts.serviceName} now at ${opts.newTime}`,
+    html: layout(opts.businessName, body),
+  })
+}
+
 // ─── Cancellation ─────────────────────────────────────────────────────────────
 
 export async function sendBookingCancellation(opts: {

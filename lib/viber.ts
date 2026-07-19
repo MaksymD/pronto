@@ -123,6 +123,47 @@ export function tplNewBooking(opts: {
     .join('\n')
 }
 
+export function tplRescheduled(opts: {
+  clientName: string
+  serviceName: string
+  oldDate: string
+  oldTime: string
+  newDate: string
+  newTime: string
+  employeeName?: string
+}): string {
+  return [
+    `🔄 Booking rescheduled`,
+    ``,
+    `👤 Client: ${opts.clientName}`,
+    `✂️ Service: ${opts.serviceName}`,
+    `🕐 Was: ${opts.oldDate} at ${opts.oldTime}`,
+    `🕐 Now: ${opts.newDate} at ${opts.newTime}`,
+    opts.employeeName ? `👷 Employee: ${opts.employeeName}` : '',
+  ]
+      .filter(Boolean)
+      .join('\n')
+}
+
+export function tplRescheduledClient(opts: {
+  clientName: string
+  serviceName: string
+  newDate: string
+  newTime: string
+  businessName: string
+}): string {
+  return [
+    `🔄 Booking rescheduled`,
+    ``,
+    `👤 ${opts.clientName}`,
+    `✂️ ${opts.serviceName}`,
+    `🕐 New time: ${opts.newDate} at ${opts.newTime}`,
+    `🏠 ${opts.businessName}`,
+    ``,
+    `Your appointment has been moved to a new time. See you then!`,
+  ].join('\n')
+}
+
 export function tplCancelled(opts: {
   clientName: string
   serviceName: string

@@ -291,7 +291,17 @@
       "statusLabel": "Status",
       "employeeLabel": "Mitarbeiter:",
       "chargeButton": "Kassieren",
-      "close": "Schließen"
+      "close": "Schließen",
+      "rescheduleButton": "Datum & Uhrzeit ändern",
+      "rescheduleLabel": "Neues Datum & Uhrzeit",
+      "rescheduleContinue": "Weiter",
+      "rescheduleConfirm": "Diesen Termin auf {date} um {time} verschieben?",
+      "rescheduleYes": "Ja, verschieben",
+      "rescheduleNo": "Abbrechen",
+      "rescheduleErrorPast": "Kann nicht auf eine Zeit in der Vergangenheit verschoben werden.",
+      "rescheduleErrorClosed": "Dieser Tag ist laut Öffnungszeiten geschlossen.",
+      "rescheduleErrorConflict": "Diese Zeit ist bereits belegt. Bitte wählen Sie eine andere Zeit.",
+      "rescheduleErrorGeneric": "Verschieben fehlgeschlagen. Bitte versuchen Sie es erneut."
     }
   },
   "settings": {
