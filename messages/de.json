@@ -589,6 +589,8 @@
       "tags": "Tags",
       "tagsPlaceholder": "Tag1, Tag2…",
       "whatsappNumber": "WhatsApp",
+      "instagram": "Instagram",
+      "language": "Bevorzugte Sprache",
       "messengers": "Messenger",
       "connected": "Verbunden ✓",
       "notConnected": "Nicht verbunden"
@@ -729,6 +731,9 @@
       "emailPlaceholder": "anna@beispiel.de",
       "whatsapp": "WhatsApp",
       "whatsappPlaceholder": "+491234567890",
+      "instagram": "Instagram",
+      "instagramPlaceholder": "@benutzername",
+      "language": "Bevorzugte Sprache",
       "birthday": "Geburtstag",
       "notes": "Notizen",
       "notesPlaceholder": "Beliebige Notizen…",

@@ -589,6 +589,8 @@
       "tags": "Теги",
       "tagsPlaceholder": "тег1, тег2…",
       "whatsappNumber": "WhatsApp",
+      "instagram": "Instagram",
+      "language": "Мова спілкування",
       "messengers": "Месенджери",
       "connected": "Підключено ✓",
       "notConnected": "Не підключено"
@@ -729,6 +731,9 @@
       "emailPlaceholder": "olena@example.com",
       "whatsapp": "WhatsApp",
       "whatsappPlaceholder": "+380991234567",
+      "instagram": "Instagram",
+      "instagramPlaceholder": "@нікнейм",
+      "language": "Мова спілкування",
       "birthday": "День народження",
       "notes": "Примітки",
       "notesPlaceholder": "Будь-які примітки…",

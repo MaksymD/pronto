@@ -21,6 +21,7 @@ export type Database = {
           address: string | null
           timezone: string
           time_format: string
+          notification_language: string
           currency: string
           logo_url: string | null
           plan: string
@@ -58,6 +59,7 @@ export type Database = {
           address?: string | null
           timezone?: string
           time_format?: string
+          notification_language?: string
           currency?: string
           logo_url?: string | null
           plan?: string
@@ -95,6 +97,7 @@ export type Database = {
           address?: string | null
           timezone?: string
           time_format?: string
+          notification_language?: string
           currency?: string
           logo_url?: string | null
           plan?: string
@@ -236,6 +239,8 @@ export type Database = {
           viber_id: string | null
           viber_user_id: string | null
           whatsapp_number: string | null
+          instagram: string | null
+          preferred_language: string
           birthday: string | null
           total_visits: number
           total_spent: number
@@ -254,6 +259,8 @@ export type Database = {
           viber_id?: string | null
           viber_user_id?: string | null
           whatsapp_number?: string | null
+          instagram?: string | null
+          preferred_language?: string
           birthday?: string | null
           total_visits?: number
           total_spent?: number
@@ -272,6 +279,8 @@ export type Database = {
           viber_id?: string | null
           viber_user_id?: string | null
           whatsapp_number?: string | null
+          instagram?: string | null
+          preferred_language?: string
           birthday?: string | null
           total_visits?: number
           total_spent?: number

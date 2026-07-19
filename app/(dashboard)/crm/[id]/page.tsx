@@ -17,11 +17,11 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
   if (!business) return null
 
   const { data: client } = await supabase
-    .from('clients')
-    .select('id, name, phone, email, birthday, notes, tags, total_visits, total_spent, last_visit_at, created_at, telegram_id, viber_user_id, whatsapp_number')
-    .eq('id', params.id)
-    .eq('business_id', business.id)
-    .maybeSingle()
+      .from('clients')
+      .select('id, name, phone, email, birthday, notes, tags, total_visits, total_spent, last_visit_at, created_at, telegram_id, viber_user_id, whatsapp_number, instagram, preferred_language')
+      .eq('id', params.id)
+      .eq('business_id', business.id)
+      .maybeSingle()
 
   if (!client) notFound()
 
